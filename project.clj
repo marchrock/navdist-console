@@ -3,18 +3,18 @@
   :url "https://github.com/marchrock/navdist-console"
   :license {:name "MIT"}
 
-  :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.10.238"]
-                 [reagent "0.7.0"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
+                 [org.clojure/clojurescript "1.10.339"]
+                 [reagent "0.8.1"]
                  [re-frame "0.10.5"]
                  [secretary "1.2.3"]
                  [garden "1.3.5"]
                  [ns-tracker "0.3.1"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
-            [lein-garden "0.2.8"]]
+            [lein-garden "0.3.0"]]
 
-  :min-lein-version "2.5.3"
+  :min-lein-version "2.8.0"
 
   :source-paths ["src/clj" "src/cljs"]
 
@@ -38,10 +38,10 @@
                    [day8.re-frame/re-frame-10x "0.3.3"]
                    [day8.re-frame/tracing "0.5.1"]
                    [figwheel-sidecar "0.5.16"]
-                   [cider/piggieback "0.3.5"]]
+                   [cider/piggieback "0.3.8"]]
 
     :plugins      [[lein-figwheel "0.5.16"]
-                   [lein-doo "0.1.8"]]}
+                   [lein-doo "0.1.10"]]}
    :prod { :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}}
 
   :cljsbuild
