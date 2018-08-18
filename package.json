@@ -1,0 +1,22 @@
+{
+  "name": "navdist-console",
+  "version": "0.1.0",
+  "description": "navdist-console",
+  "main": "resources/app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marchrock/navdist-console.git"
+  },
+  "author": "marchrock",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marchrock/navdist-console/issues"
+  },
+  "homepage": "https://github.com/marchrock/navdist-console#readme"
+}

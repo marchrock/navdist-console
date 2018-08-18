@@ -1,4 +1,8 @@
 (defproject navdist-console "0.1.0-SNAPSHOT"
+  :description "Navdist Console - Better console to rule the wave"
+  :url "https://github.com/marchrock/navdist-console"
+  :license {:name "MIT"}
+
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.10.238"]
                  [reagent "0.7.0"]
