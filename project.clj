@@ -49,7 +49,7 @@
   {:builds
    [{:id           "dev"
      :source-paths ["src/cljs"]
-     :figwheel     {:on-jsload "navdist-console.core/mount-root"}
+     :figwheel     {:on-jsload "navdist-console.core/reload-hook"}
      :compiler     {:main                 navdist-console.core
                     :output-to            "resources/public/js/compiled/app.js"
                     :output-dir           "resources/public/js/compiled/out"

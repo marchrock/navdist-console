@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-      "start": "electron .",
+      "start": "lein garden once && electron .",
       "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

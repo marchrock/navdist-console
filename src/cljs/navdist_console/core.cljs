@@ -21,6 +21,11 @@
   (reagent/render [views/main-panel]
                   (.getElementById js/document "app")))
 
+(defn reload-hook []
+  (timbre/info "reload-hook")
+  (mount-root)
+  (initialize-dispatcher))
+
 (defn ^:export init []
   (routes/app-routes)
   (re-frame/dispatch-sync [::events/initialize-db])
