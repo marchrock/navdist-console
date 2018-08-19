@@ -9,7 +9,8 @@
                  [re-frame "0.10.5"]
                  [secretary "1.2.3"]
                  [garden "1.3.5"]
-                 [ns-tracker "0.3.1"]]
+                 [ns-tracker "0.3.1"]
+                 [com.taoensso/timbre "4.10.0"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-garden "0.3.0"]]
