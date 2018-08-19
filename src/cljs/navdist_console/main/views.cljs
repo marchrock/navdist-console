@@ -1,26 +1,48 @@
 (ns navdist-console.main.views
   (:require
    [re-frame.core :as re-frame]
+   [navdist-console.main.events :as events]
    [navdist-console.main.subs :as subs]
+   ["material-ui" :as mui]
+   ["material-ui/styles" :as mui-styles]
+   ["material-ui/colors" :as mui-colors]
+   ["material-ui-icons" :as mui-icons]
    ))
 
 ;; web-view
 
 (defn fgc-webview []
   (let [uri (re-frame/subscribe [::subs/fgc-uri])]
-    [:div {:class "fgc-div"}
-     [:webview {:class "fgc-webview" :id "fgc-webview" :src @uri}]]))
+    [:> mui/Grid {:class "fgc-div" :item true}
+     [:webview#fgc-webview.fgc-webview {:src @uri}]]))
 
 (defn fgc-screenshot-button []
-  [:button "Screen Shot"])
+  [:> mui/Grid {:item true}
+   [:> mui/Button {:on-click #(re-frame/dispatch [::events/take-screenshot])}
+    "Screen Shot"]])
 
 (defn fgc-mute-button []
-  [:button "Mute"])
+  [:> mui/Grid {:item true}
+   [:> mui/Button "Mute"]])
 
 ;; main
 
-(defn main-panel []
-  [:div
+(defn left-down-panel []
+  [:> mui/Grid {:item true :container true}])
+
+(defn left-panel []
+  [:> mui/Grid {:container true :item true :direction "column"}
    [fgc-webview]
-   [fgc-screenshot-button]
-   [fgc-mute-button]])
+   [:> mui/Grid {:item true :container true :direction "row" :justify "flex-start"}
+    [fgc-screenshot-button]
+    [fgc-mute-button]]
+   [left-down-panel]])
+
+(defn right-panel []
+  [:> mui/Grid {:container true :item true}])
+
+(defn main-panel []
+  [:> mui/Grid {:container true :direction "row"}
+   [left-panel]
+   [right-panel]
+   ])

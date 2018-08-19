@@ -10,7 +10,10 @@
                  [secretary "1.2.3"]
                  [garden "1.3.5"]
                  [ns-tracker "0.3.1"]
-                 [com.taoensso/timbre "4.10.0"]]
+                 [com.taoensso/timbre "4.10.0"]
+                 [com.andrewmcveigh/cljs-time "0.5.2"]
+                 [cljsjs/material-ui "1.4.0-0"]
+                 [cljsjs/material-ui-icons "1.1.0-1"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-garden "0.3.0"]]

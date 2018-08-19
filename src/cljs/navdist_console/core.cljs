@@ -2,6 +2,7 @@
   (:require
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
+   [taoensso.timbre :as timbre :refer-macros [info]]
    [navdist-console.main.events :as events]
    [navdist-console.main.views :as views]
    [navdist-console.routes :as routes]
