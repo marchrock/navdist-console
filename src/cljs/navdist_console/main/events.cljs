@@ -45,10 +45,11 @@
  (fn-traced
   [cofx _]
   (let [wv (:main-webview cofx)
-        wv-css (re-frame/subscribe [::subs/fgc-webview-css])]
-    (timbre/spy @wv-css)
+        db (:db cofx)
+        wv-css (get-in db [:config :fgc-css])]
+    (timbre/spy wv-css)
     (.addEventListener wv "did-finish-load"
-                       (fn [] (.insertCSS wv @wv-css))))))
+                       (fn [] (.insertCSS wv wv-css))))))
 
 (re-frame/reg-event-fx
  ::take-screenshot
@@ -58,19 +59,39 @@
  (fn-traced
   [cofx _]
   (let [db (:db cofx)
-        file-path (:screenshot-path db)
-        file-prefix (:screenshot-prefix db)
+        file-path (get-in db [:config :screenshot-path])
+        file-prefix (get-in db [:config :screenshot-prefix])
         current-time (time-format/unparse (:screenshot-time-format cofx) (:now cofx))
         wv (:main-webview cofx)]
-    (timbre/spy file-path)
-    (timbre/spy file-prefix)
-    (.capturePage wv
-                  (fn [img]
-                    (let [png-img (.toPNG img)
-                          file-full-path (str file-path file-prefix current-time ".png")]
-                      (.writeFile fs file-full-path png-img
-                                  (fn [err]
-                                    (if err
-                                      (timbre/error err)
-                                      (timbre/info "Screenshot Saved at" file-full-path)))))))
-    )))
+    {:webview-screenshot
+     {:full-file-path (str file-path file-prefix current-time ".png")
+      :target-webview wv
+      :on-success [:webview-screenshot-success]
+      :on-failure [:webview-screenshot-failure]}})))
+
+(re-frame/reg-event-db
+ :webview-screenshot-success
+ (fn-traced
+  [db [ev eva]]
+  (timbre/spy eva)
+  (-> db
+      (update-in [:state :notification] assoc :open true :type :normal :message "Screenshot Saved!")
+      (as-> x (timbre/spy x))))
+  )
+
+(re-frame/reg-event-fx
+ :webview-screenshot-failure
+ (fn-traced
+  [cofx ev]
+  (timbre/spy ev)
+  {}
+  ))
+
+(re-frame/reg-event-db
+ ::close-notification
+ (fn-traced
+  [db _]
+  (timbre/spy db)
+  (-> db
+      (update-in [:state :notification] assoc :open false :type :normal :message "")
+      (as-> x (timbre/spy x)))))

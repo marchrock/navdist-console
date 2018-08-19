@@ -6,9 +6,14 @@
 (re-frame/reg-sub
  ::fgc-uri
  (fn [db]
-   (:uri db)))
+   (get-in db [:config :uri])))
 
 (re-frame/reg-sub
  ::fgc-webview-css
  (fn [db]
-   (:fgc-css db)))
+   (get-in db [:config :fgc-css])))
+
+(re-frame/reg-sub
+ ::state-notification
+ (fn [db]
+   (get-in db [:state :notification])))

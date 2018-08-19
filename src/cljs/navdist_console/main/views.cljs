@@ -25,6 +25,15 @@
   [:> mui/Grid {:item true}
    [:> mui/Button "Mute"]])
 
+(defn notification-bar []
+  (let [state (re-frame/subscribe [::subs/state-notification])]
+    [:> mui/Snackbar {:anchorOrigin (clj->js {:vertical "bottom" :horizontal "left"})
+                      :open (get-in @state [:open])
+                      :on-close #(re-frame/dispatch [::events/close-notification])
+                      :autoHideDuration 2000
+                      :message (get-in @state [:message])}]
+    ))
+
 ;; main
 
 (defn left-down-panel []
@@ -45,4 +54,5 @@
   [:> mui/Grid {:container true :direction "row"}
    [left-panel]
    [right-panel]
+   [notification-bar]
    ])
