@@ -3,6 +3,7 @@
    [re-frame.core :as re-frame]
    [navdist-console.main.db :as db]
    [navdist-console.main.subs :as subs]
+   [navdist-console.main.screenshot :as screenshot]
    [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
    [taoensso.timbre :as timbre :refer-macros [spy info]]
    [cljs-time.core :as time]

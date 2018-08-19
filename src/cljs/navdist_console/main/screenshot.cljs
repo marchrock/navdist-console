@@ -1,6 +1,7 @@
 (ns navdist-console.main.screenshot
   (:require
    [re-frame.core :as re-frame]
+   [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
    [taoensso.timbre :as timbre]
    ))
 
@@ -22,7 +23,7 @@
                                       (re-frame/dispatch [on-failure {:err err}])
                                       (re-frame/dispatch [on-success {:msg full-file-path}])))))))))
 
-(defn screenshot-effect
+(defn-traced screenshot-effect
   [req]
   (timbre/spy req)
   (-> req
