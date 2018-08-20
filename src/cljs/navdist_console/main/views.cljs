@@ -68,15 +68,16 @@
 (defn app-bar
   "Top app-bar with Global menu, app title, and basic feature button."
   []
-  [:> mui/AppBar {:position "static"}
-   [:> mui/Toolbar {:variant "dense"}
-    [:> mui/IconButton {:className "menuButton" :color "inherit" :aria-label "menu"
+  [:> mui/AppBar {:id "global-app-bar" :position "static"}
+   [:> mui/Toolbar {:id "drag-region" :variant "dense"}
+    [:> mui/IconButton {:className "no-drag-region" :color "inherit" :aria-label "menu"
                         :style app-bar-menu-style}
      [:> mui-icons/Menu]]
     [:> mui/Typography {:variant "title" :color "inherit" :style flex-style}
      "Navdist Console"]
-    [fgc-screenshot-icon-button]
-    [fgc-volume-toggle-icon-button]
+    [:div {:className "no-drag-region"}
+     [fgc-screenshot-icon-button]
+     [fgc-volume-toggle-icon-button]]
     ]])
 
 (defn left-down-panel
