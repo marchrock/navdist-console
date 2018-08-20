@@ -8,6 +8,7 @@
 (defonce fs (js/require "fs"))
 
 (defn screenshot-handler
+  "Take screenshot of target webview provided by :webview-screenshot effect handler"
   [req]
   (let [full-file-path (:full-file-path req)
         target-webview (:target-webview req)

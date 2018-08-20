@@ -11,22 +11,26 @@
    [cljs-time.format :as time-format]
    ))
 
-(defonce fs (js/require "fs"))
-
 ;; event cofx
 
+;; get main webview from dom and assoc to cofx
+;; use webview via (:main-webview cofx)
 (re-frame/reg-cofx
  :main-webview
  (fn-traced
   [cofx _]
   (assoc cofx :main-webview (.getElementById js/document "fgc-webview"))))
 
+;; create screenshot time format and assoc to cofx
+;; use webview via (:screenshot-time-format cofx)
 (re-frame/reg-cofx
  :screenshot-time-format
  (fn-traced
   [cofx _]
   (assoc cofx :screenshot-time-format (time-format/formatter "yyyyMMdd-hhmmss"))))
 
+;; get current time and assoc to cofx
+;; use webview via (:now cofx)
 (re-frame/reg-cofx
  :now
  (fn-traced
@@ -35,12 +39,14 @@
 
 ;; event handlers
 
+;; initializing db
 (re-frame/reg-event-db
  ::initialize-db
  (fn-traced
   [_ _]
   db/default-db))
 
+;; initialize webview event to inject css to show only game screen in webview
 (re-frame/reg-event-fx
  ::initialize-webview
  [(re-frame/inject-cofx :main-webview)]
@@ -53,6 +59,8 @@
     (.addEventListener wv "did-finish-load"
                        (fn [] (.insertCSS wv wv-css))))))
 
+;; event handler for volume toggling of webview
+;; actual effect handling happens in navidst-console.main.volume
 (re-frame/reg-event-fx
  ::toggle-volume
  [(re-frame/inject-cofx :main-webview)]
@@ -67,6 +75,8 @@
       {:toggle-volume-off {:mute true :target-webview wv}
        :db (assoc-in db [:state :mute] true)}))))
 
+;; event handler for taking screenshot
+;; actual effect handling happens in navdist-console.main.screenshot
 (re-frame/reg-event-fx
  ::take-screenshot
  [(re-frame/inject-cofx :main-webview)
@@ -85,7 +95,8 @@
       :on-success [:webview-screenshot-success]
       :on-failure [:webview-screenshot-failure]}})))
 
-
+;; event handler when taking screenshot succeeded
+;; TODO: need more generalized notification event handler
 (re-frame/reg-event-db
  :webview-screenshot-success
  (fn-traced
@@ -96,6 +107,9 @@
       (as-> x (timbre/spy x))))
   )
 
+;; event handler when taking screenshot somehow failed
+;; currently, does nothing
+;; TODO: implement some error notification
 (re-frame/reg-event-fx
  :webview-screenshot-failure
  (fn-traced
@@ -104,6 +118,7 @@
   {}
   ))
 
+;; db event handler for notification snackbar close
 (re-frame/reg-event-db
  ::close-notification
  (fn-traced

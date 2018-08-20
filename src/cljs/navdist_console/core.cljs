@@ -9,12 +9,15 @@
    [navdist-console.config :as config]
    ))
 
-(defn dev-setup []
+(defn dev-setup
+  []
   (when config/debug?
     (enable-console-print!)
     (println "dev mode")))
 
-(defn initialize-dispatcher []
+(defn initialize-dispatcher
+  "Dispatch event which required after mouting root"
+  []
   (re-frame/dispatch [::events/initialize-webview]))
 
 (defn mount-root []
@@ -22,12 +25,16 @@
   (reagent/render [views/main-panel]
                   (.getElementById js/document "app")))
 
-(defn reload-hook []
+(defn reload-hook
+  "Reload hook when figwheel hot-reload"
+  []
   (timbre/info "reload-hook")
   (mount-root)
   (initialize-dispatcher))
 
-(defn ^:export init []
+(defn ^:export init
+  "entry point"
+  []
   (routes/app-routes)
   (re-frame/dispatch-sync [::events/initialize-db])
   (dev-setup)

@@ -6,6 +6,7 @@
    ))
 
 (defn toggle-volume-handler
+  "Toggle volume of target webview provided by :toggle-volume-on or :toggle-volume-off effect handler"
   [req]
   (let [mute (:mute req)
         target-webview (:target-webview req)]

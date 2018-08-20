@@ -2,6 +2,7 @@
 
 (defonce os (js/require "os"))
 
+;; default db structure
 (def default-db
   {:config
    {:uri "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"

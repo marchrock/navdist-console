@@ -10,26 +10,37 @@
    ["material-ui-icons" :as mui-icons]
    ))
 
-;; state
+;; style
 
 (def flex-style
   (clj->js {:flexGrow 1}))
 
+(def app-bar-menu-style
+  (clj->js {:marginLeft -18 :marginRight 10}))
+
 
 ;; web-view
 
-(defn fgc-webview []
+(defn fgc-webview
+  "Webview containing game view."
+  []
   (let [uri (re-frame/subscribe [::subs/fgc-uri])]
     [:> mui/Grid {:class "fgc-div" :item true}
      [:webview#fgc-webview.fgc-webview {:src @uri}]]))
 
-(defn fgc-screenshot-icon-button []
+;; button
+
+(defn fgc-screenshot-icon-button
+  "App-bar screenshot button w/ camera icon."
+  []
   [:> mui/IconButton {:className "screenshotButton" :color "inherit"
                       :aria-label "screenshot"
                       :on-click #(re-frame/dispatch [::events/take-screenshot])}
    [:> mui-icons/CameraAlt]])
 
-(defn fgc-mute-icon-button []
+(defn fgc-volume-toggle-icon-button
+  "App-bar volume toggle button w/ volume icon."
+  []
   (let [state (re-frame/subscribe [::subs/state-mute])]
     [:> mui/IconButton {:className "muteButton" :color "inherit"
                         :aria-label "mute"
@@ -39,7 +50,11 @@
        [:> mui-icons/VolumeUp])]
     ))
 
-(defn notification-bar []
+;; snackbar
+
+(defn notification-bar
+  "Global notification bar subscribing ::state-notification."
+  []
   (let [state (re-frame/subscribe [::subs/state-notification])]
     [:> mui/Snackbar {:anchorOrigin (clj->js {:vertical "bottom" :horizontal "left"})
                       :open (get-in @state [:open])
@@ -48,37 +63,46 @@
                       :message (get-in @state [:message])}]
     ))
 
-;; main
+;; panels
 
-(defn app-bar []
+(defn app-bar
+  "Top app-bar with Global menu, app title, and basic feature button."
+  []
   [:> mui/AppBar {:position "static"}
    [:> mui/Toolbar {:variant "dense"}
     [:> mui/IconButton {:className "menuButton" :color "inherit" :aria-label "menu"
-                        :style (clj->js {:marginLeft -18 :marginRight 10})}
+                        :style app-bar-menu-style}
      [:> mui-icons/Menu]]
     [:> mui/Typography {:variant "title" :color "inherit" :style flex-style}
      "Navdist Console"]
     [fgc-screenshot-icon-button]
-    [fgc-mute-icon-button]
+    [fgc-volume-toggle-icon-button]
     ]])
 
-(defn left-down-panel []
+(defn left-down-panel
+  "Left side down panel for future usage"
+  []
   [:> mui/Grid {:item true :container true}])
 
-(defn left-panel []
+(defn left-panel
+  "Left panel for app. Main panel containing game webview"
+  []
   [:> mui/Grid {:container true :item true :direction "column"}
    [fgc-webview]
    [left-down-panel]])
 
-(defn right-panel []
+(defn right-panel
+  "Right panel for app. Expected to be used in Extension mode"
+  []
   [:> mui/Grid {:container true :item true}])
 
-(defn main-panel []
-  [:div {:class "root" :style (clj->js {:flexGrow 1})}
+(defn main-panel
+  "Main panel for app"
+  []
+  [:div {:class "root" :style flex-style}
    [app-bar]
    [:> mui/Grid {:container true :direction "row"}
     [left-panel]
     [right-panel]
     [notification-bar]]
-   ]
-  )
+   ])
