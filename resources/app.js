@@ -8,7 +8,7 @@ app.on('ready', () => {
     mainWindow = new BrowserWindow({
         title: "Navdist Console",
         width: 1200,
-        height: 720,
+        height: 768,
         useContentSize: true});
 
     mainWindow.loadURL('file://' + __dirname + '/public/index.html');

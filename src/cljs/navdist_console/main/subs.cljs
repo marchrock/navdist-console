@@ -17,3 +17,8 @@
  ::state-notification
  (fn [db]
    (get-in db [:state :notification])))
+
+(re-frame/reg-sub
+ ::state-mute
+ (fn [db]
+   (get-in db [:state :mute])))

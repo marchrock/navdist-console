@@ -3,7 +3,8 @@
    [re-frame.core :as re-frame]
    [navdist-console.main.db :as db]
    [navdist-console.main.subs :as subs]
-   [navdist-console.main.screenshot :as screenshot]
+   [navdist-console.main.screenshot]
+   [navdist-console.main.volume]
    [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
    [taoensso.timbre :as timbre :refer-macros [spy info]]
    [cljs-time.core :as time]
@@ -53,6 +54,20 @@
                        (fn [] (.insertCSS wv wv-css))))))
 
 (re-frame/reg-event-fx
+ ::toggle-volume
+ [(re-frame/inject-cofx :main-webview)]
+ (fn-traced
+  [cofx _]
+  (let [db (:db cofx)
+        mute (get-in db [:state :mute])
+        wv (:main-webview cofx)]
+    (if mute
+      {:toggle-volume-on {:mute false :target-webview wv}
+       :db (assoc-in db [:state :mute] false)}
+      {:toggle-volume-off {:mute true :target-webview wv}
+       :db (assoc-in db [:state :mute] true)}))))
+
+(re-frame/reg-event-fx
  ::take-screenshot
  [(re-frame/inject-cofx :main-webview)
   (re-frame/inject-cofx :screenshot-time-format)
@@ -69,6 +84,7 @@
       :target-webview wv
       :on-success [:webview-screenshot-success]
       :on-failure [:webview-screenshot-failure]}})))
+
 
 (re-frame/reg-event-db
  :webview-screenshot-success

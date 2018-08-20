@@ -1,5 +1,6 @@
 (ns navdist-console.main.views
   (:require
+   [reagent.core :as reagent]
    [re-frame.core :as re-frame]
    [navdist-console.main.events :as events]
    [navdist-console.main.subs :as subs]
@@ -9,6 +10,12 @@
    ["material-ui-icons" :as mui-icons]
    ))
 
+;; state
+
+(def flex-style
+  (clj->js {:flexGrow 1}))
+
+
 ;; web-view
 
 (defn fgc-webview []
@@ -16,14 +23,21 @@
     [:> mui/Grid {:class "fgc-div" :item true}
      [:webview#fgc-webview.fgc-webview {:src @uri}]]))
 
-(defn fgc-screenshot-button []
-  [:> mui/Grid {:item true}
-   [:> mui/Button {:on-click #(re-frame/dispatch [::events/take-screenshot])}
-    "Screen Shot"]])
+(defn fgc-screenshot-icon-button []
+  [:> mui/IconButton {:className "screenshotButton" :color "inherit"
+                      :aria-label "screenshot"
+                      :on-click #(re-frame/dispatch [::events/take-screenshot])}
+   [:> mui-icons/CameraAlt]])
 
-(defn fgc-mute-button []
-  [:> mui/Grid {:item true}
-   [:> mui/Button "Mute"]])
+(defn fgc-mute-icon-button []
+  (let [state (re-frame/subscribe [::subs/state-mute])]
+    [:> mui/IconButton {:className "muteButton" :color "inherit"
+                        :aria-label "mute"
+                        :on-click #(re-frame/dispatch [::events/toggle-volume])}
+     (if @state
+       [:> mui-icons/VolumeOff]
+       [:> mui-icons/VolumeUp])]
+    ))
 
 (defn notification-bar []
   (let [state (re-frame/subscribe [::subs/state-notification])]
@@ -36,23 +50,35 @@
 
 ;; main
 
+(defn app-bar []
+  [:> mui/AppBar {:position "static"}
+   [:> mui/Toolbar {:variant "dense"}
+    [:> mui/IconButton {:className "menuButton" :color "inherit" :aria-label "menu"
+                        :style (clj->js {:marginLeft -18 :marginRight 10})}
+     [:> mui-icons/Menu]]
+    [:> mui/Typography {:variant "title" :color "inherit" :style flex-style}
+     "Navdist Console"]
+    [fgc-screenshot-icon-button]
+    [fgc-mute-icon-button]
+    ]])
+
 (defn left-down-panel []
   [:> mui/Grid {:item true :container true}])
 
 (defn left-panel []
   [:> mui/Grid {:container true :item true :direction "column"}
    [fgc-webview]
-   [:> mui/Grid {:item true :container true :direction "row" :justify "flex-start"}
-    [fgc-screenshot-button]
-    [fgc-mute-button]]
    [left-down-panel]])
 
 (defn right-panel []
   [:> mui/Grid {:container true :item true}])
 
 (defn main-panel []
-  [:> mui/Grid {:container true :direction "row"}
-   [left-panel]
-   [right-panel]
-   [notification-bar]
-   ])
+  [:div {:class "root" :style (clj->js {:flexGrow 1})}
+   [app-bar]
+   [:> mui/Grid {:container true :direction "row"}
+    [left-panel]
+    [right-panel]
+    [notification-bar]]
+   ]
+  )
