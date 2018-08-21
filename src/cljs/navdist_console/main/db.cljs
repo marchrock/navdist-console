@@ -12,5 +12,6 @@
    :state
    {:notification {:open false :type :normal :message ""}
     :mute false
-    :menu-drawer {:open false}}}
+    :menu-drawer {:open false}
+    :dialog {:shutdown false}}}
    )

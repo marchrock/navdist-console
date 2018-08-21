@@ -5,6 +5,7 @@
    [navdist-console.main.subs :as subs]
    [navdist-console.main.screenshot]
    [navdist-console.main.volume]
+   [navdist-console.main.shutdown]
    [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
    [taoensso.timbre :as timbre :refer-macros [spy info]]
    [cljs-time.core :as time]
@@ -36,6 +37,16 @@
  (fn-traced
   [cofx _]
   (assoc cofx :now (time/now))))
+
+;; get current electron window
+(re-frame/reg-cofx
+ :current-app
+ (fn-traced
+  [cofx _]
+  (let [electron (js/require "electron")
+        remote (.-remote electron)
+        window (.getCurrentWindow remote)]
+    (assoc cofx :current-app window))))
 
 ;; event handlers
 
@@ -145,3 +156,29 @@
   (-> db
       (update-in [:state :menu-drawer] assoc :open false)
       (as-> x (timbre/spy x)))))
+
+;; db event handler to show shutdown confirmation dialog
+(re-frame/reg-event-db
+ ::open-shutdown-dialog
+ (fn-traced
+  [db _]
+  (timbre/debug "::open-shutdown-dialog")
+  (-> db
+      (update-in [:state :dialog] assoc :shutdown true))))
+
+;; db event handler to hide shutdown confirmation dialog
+(re-frame/reg-event-db
+ ::close-shutdown-dialog
+ (fn-traced
+  [db _]
+  (timbre/debug "::close-shutdown-dialog")
+  (-> db
+      (update-in [:state :dialog] assoc :shutdown false))))
+
+;; event handler to shutdown app
+(re-frame/reg-event-fx
+ ::shutdown-app
+ [(re-frame/inject-cofx :current-app)]
+ (fn-traced
+  [cofx _]
+  {:shutdown-navdist-console {:current-app (:current-app cofx)}}))

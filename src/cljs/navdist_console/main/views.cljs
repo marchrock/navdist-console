@@ -4,6 +4,7 @@
    [re-frame.core :as re-frame]
    [navdist-console.main.events :as events]
    [navdist-console.main.subs :as subs]
+   [taoensso.timbre :as timbre]
    ["material-ui" :as mui]
    ["material-ui/styles" :as mui-styles]
    ["material-ui/colors" :as mui-colors]
@@ -64,6 +65,22 @@
 
 ;; panels
 
+(defn confirm-shutdown-dialog
+  []
+  (let [state (re-frame/subscribe [::subs/state-dialog-shutdown])]
+    (timbre/spy @state)
+    [:> mui/Dialog {:open @state
+                    :on-close #(re-frame/dispatch [::events/close-shutdown-dialog])}
+     [:> mui/DialogTitle
+      "Shutdown Navdist Console?"]
+     [:> mui/DialogActions
+      [:> mui/Button {:on-click #(re-frame/dispatch [::events/close-shutdown-dialog])
+                      :autoFocus true}
+       "Cancel"]
+      [:> mui/Button {:on-click #(re-frame/dispatch [::events/shutdown-app])
+                      :color "secondary"}
+       "Shutdown"]]]))
+
 (defn app-menu-drawer
   []
   (let [state (re-frame/subscribe [::subs/state-menu-drawer])]
@@ -72,16 +89,19 @@
                      :on-close #(re-frame/dispatch [::events/menu-drawer-close])}
       [:div {:tabIndex 0 :role "button"
              :on-click #(re-frame/dispatch [::events/menu-drawer-close])
-             :on-keydown #(re-frame/dispatch [::events/menu-drawer-close])}
+             :on-keyDown #(re-frame/dispatch [::events/menu-drawer-close])}
        [:> mui/Toolbar {:variant "dense"}
         [:> mui/Typography {:variant "subheading" :color "inherit" :style flex-style}
          "Navdist Menu"]]
        [:> mui/List
-        [:> mui/ListItem {:button true}
+        [:> mui/ListItem {:button true
+                          :on-click #(re-frame/dispatch [::events/open-shutdown-dialog])}
          [:> mui/ListItemIcon
           [:> mui-icons/PowerSettingsNew]]
          [:> mui/ListItemText {:primary "Shutdown"}]]
-        ]]]]
+        ]]]
+     [confirm-shutdown-dialog]
+     ]
     ))
 
 (defn app-bar

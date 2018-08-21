@@ -27,3 +27,8 @@
  ::state-menu-drawer
  (fn [db]
    (get-in db [:state :menu-drawer])))
+
+(re-frame/reg-sub
+ ::state-dialog-shutdown
+ (fn [db]
+   (get-in db [:state :dialog :shutdown])))
