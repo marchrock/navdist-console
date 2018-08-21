@@ -18,7 +18,6 @@
 (def app-bar-menu-style
   (clj->js {:marginLeft -18 :marginRight 10}))
 
-
 ;; web-view
 
 (defn fgc-webview
@@ -65,12 +64,33 @@
 
 ;; panels
 
+(defn app-menu-drawer
+  []
+  (let [state (re-frame/subscribe [::subs/state-menu-drawer])]
+    [:div
+     [:> mui/Drawer {:open (get-in @state [:open])
+                     :on-close #(re-frame/dispatch [::events/menu-drawer-close])}
+      [:div {:tabIndex 0 :role "button"
+             :on-click #(re-frame/dispatch [::events/menu-drawer-close])
+             :on-keydown #(re-frame/dispatch [::events/menu-drawer-close])}
+       [:> mui/Toolbar {:variant "dense"}
+        [:> mui/Typography {:variant "subheading" :color "inherit" :style flex-style}
+         "Navdist Menu"]]
+       [:> mui/List
+        [:> mui/ListItem {:button true}
+         [:> mui/ListItemIcon
+          [:> mui-icons/PowerSettingsNew]]
+         [:> mui/ListItemText {:primary "Shutdown"}]]
+        ]]]]
+    ))
+
 (defn app-bar
   "Top app-bar with Global menu, app title, and basic feature button."
   []
   [:> mui/AppBar {:id "global-app-bar" :position "static"}
    [:> mui/Toolbar {:id "drag-region" :variant "dense"}
     [:> mui/IconButton {:className "no-drag-region" :color "inherit" :aria-label "menu"
+                        :on-click #(re-frame/dispatch [::events/menu-drawer-open])
                         :style app-bar-menu-style}
      [:> mui-icons/Menu]]
     [:> mui/Typography {:variant "title" :color "inherit" :style flex-style}
@@ -102,6 +122,7 @@
   []
   [:div {:class "root" :style flex-style}
    [app-bar]
+   [app-menu-drawer]
    [:> mui/Grid {:container true :direction "row"}
     [left-panel]
     [right-panel]

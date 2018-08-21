@@ -11,5 +11,6 @@
     :screenshot-prefix "navdist-"}
    :state
    {:notification {:open false :type :normal :message ""}
-    :mute false}}
+    :mute false
+    :menu-drawer {:open false}}}
    )

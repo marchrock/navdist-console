@@ -127,3 +127,21 @@
   (-> db
       (update-in [:state :notification] assoc :open false :type :normal :message "")
       (as-> x (timbre/spy x)))))
+
+;; db event handler for menu drawer open
+(re-frame/reg-event-db
+ ::menu-drawer-open
+ (fn-traced
+  [db _]
+  (-> db
+      (update-in [:state :menu-drawer] assoc :open true)
+      (as-> x (timbre/spy x)))))
+
+;; db event handler for menu drawber close
+(re-frame/reg-event-db
+ ::menu-drawer-close
+ (fn-traced
+  [db _]
+  (-> db
+      (update-in [:state :menu-drawer] assoc :open false)
+      (as-> x (timbre/spy x)))))

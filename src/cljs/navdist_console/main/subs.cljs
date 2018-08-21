@@ -22,3 +22,8 @@
  ::state-mute
  (fn [db]
    (get-in db [:state :mute])))
+
+(re-frame/reg-sub
+ ::state-menu-drawer
+ (fn [db]
+   (get-in db [:state :menu-drawer])))
