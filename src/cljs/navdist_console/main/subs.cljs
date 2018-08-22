@@ -1,12 +1,19 @@
 (ns navdist-console.main.subs
   (:require
    [re-frame.core :as re-frame]
+   [taoensso.timbre :as timbre]
    ))
 
 (re-frame/reg-sub
  ::fgc-uri
  (fn [db]
    (get-in db [:config :uri])))
+
+(re-frame/reg-sub
+ ::app-locale
+ (fn [db]
+   (timbre/spy db)
+   (get-in db [:config :locale])))
 
 (re-frame/reg-sub
  ::fgc-webview-css
@@ -32,3 +39,4 @@
  ::state-dialog-shutdown
  (fn [db]
    (get-in db [:state :dialog :shutdown])))
+

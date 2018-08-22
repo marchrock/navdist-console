@@ -11,6 +11,7 @@
                  [garden "1.3.5"]
                  [ns-tracker "0.3.1"]
                  [com.taoensso/timbre "4.10.0"]
+                 [com.taoensso/tempura "1.2.1"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [cljsjs/material-ui "1.4.0-0"]
                  [cljsjs/material-ui-icons "1.1.0-1"]]

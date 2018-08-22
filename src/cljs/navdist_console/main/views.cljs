@@ -4,6 +4,7 @@
    [re-frame.core :as re-frame]
    [navdist-console.main.events :as events]
    [navdist-console.main.subs :as subs]
+   [navdist-console.i18n :as i18n]
    [taoensso.timbre :as timbre]
    ["material-ui" :as mui]
    ["material-ui/styles" :as mui-styles]
@@ -72,14 +73,14 @@
     [:> mui/Dialog {:open @state
                     :on-close #(re-frame/dispatch [::events/close-shutdown-dialog])}
      [:> mui/DialogTitle
-      "Shutdown Navdist Console?"]
+      (i18n/tr-nd [:dialog/shutdown])]
      [:> mui/DialogActions
       [:> mui/Button {:on-click #(re-frame/dispatch [::events/close-shutdown-dialog])
                       :autoFocus true}
-       "Cancel"]
+       (i18n/tr-nd [:button/cancel])]
       [:> mui/Button {:on-click #(re-frame/dispatch [::events/shutdown-app])
                       :color "secondary"}
-       "Shutdown"]]]))
+       (i18n/tr-nd [:button/shutdown])]]]))
 
 (defn app-menu-drawer
   []
@@ -98,8 +99,9 @@
                           :on-click #(re-frame/dispatch [::events/open-shutdown-dialog])}
          [:> mui/ListItemIcon
           [:> mui-icons/PowerSettingsNew]]
-         [:> mui/ListItemText {:primary "Shutdown"}]]
-        ]]]
+         [:> mui/ListItemText {:primary (i18n/tr-nd [:global-menu/shutdown])}]]
+        ]
+       ]]
      [confirm-shutdown-dialog]
      ]
     ))

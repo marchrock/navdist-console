@@ -7,6 +7,7 @@
    [navdist-console.main.views :as views]
    [navdist-console.routes :as routes]
    [navdist-console.config :as config]
+   [navdist-console.i18n]
    ))
 
 (defn dev-setup
