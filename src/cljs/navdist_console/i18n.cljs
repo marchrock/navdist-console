@@ -11,7 +11,8 @@
 
 (def navdist-i18n-dictionary
   {:ja {:global-menu
-        {:shutdown "終了"}
+        {:shutdown "終了"
+         :configure "設定"}
         :dialog
         {:shutdown (str app-name " を終了しますか？")}
         :button
@@ -21,7 +22,8 @@
         }
 
    :en {:global-menu
-        {:shutdown "Shutdown"}
+        {:shutdown "Shutdown"
+         :configure "Configure"}
         :dialog
         {:shutdown (str "Shutdown " app-name " ?")}
         :button

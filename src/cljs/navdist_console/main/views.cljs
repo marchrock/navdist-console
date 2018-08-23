@@ -98,6 +98,14 @@
         [:> mui/ListItem {:button true
                           :on-click #(re-frame/dispatch [::events/open-shutdown-dialog])}
          [:> mui/ListItemIcon
+          [:> mui-icons/Settings]]
+         [:> mui/ListItemText {:primary (i18n/tr-nd [:global-menu/configure])}]]
+        ]
+       [:> mui/Divider]
+       [:> mui/List
+        [:> mui/ListItem {:button true
+                          :on-click #(re-frame/dispatch [::events/open-shutdown-dialog])}
+         [:> mui/ListItemIcon
           [:> mui-icons/PowerSettingsNew]]
          [:> mui/ListItemText {:primary (i18n/tr-nd [:global-menu/shutdown])}]]
         ]
