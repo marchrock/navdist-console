@@ -64,18 +64,56 @@
      :db (assoc-in (:db cofx) [:state :volume] (not volume))})))
 
 ;; toggle app-menu state
+;; toggle app menu open/close state
 (re-frame/reg-event-db
  :toggle-app-menu
  (fn-traced
   [db [_ open?]]
   (-> db
       (update-in [:state :app-menu] assoc :open open?)
-      (as-> x (timbre/spy x)))))
+      (timbre/spy))))
 
+;; toggle shutdown dialog open/close state
 (re-frame/reg-event-db
  :toggle-dialog-shutdown
  (fn-traced
   [db [_ open?]]
   (-> db
       (update-in [:state :dialog] assoc :shutdown open?)
-      (as-> x (timbre/spy x)))))
+      (timbre/spy))))
+
+;; success notification
+(re-frame/reg-event-db
+ :notify-success
+ (fn-traced
+  [db [_ v]]
+  (-> db
+      (assoc-in [:state :notification] {:open true
+                                        :type :normal
+                                        :duration 2000
+                                        :message (:msg v)})
+      (timbre/spy))))
+
+;; notify failure
+(re-frame/reg-event-db
+ :notify-failure
+ (fn-traced
+  [db [_ v]]
+  (-> db
+      (assoc-in [:state :notification] {:open true
+                                        :type :error
+                                        :duration 2000
+                                        :message (:msg v)})
+      (timbre/spy))))
+
+;; close notification snackbar
+(re-frame/reg-event-db
+ :close-notification
+ (fn-traced
+  [db _]
+  (-> db
+      (assoc-in [:state :notification] {:open false
+                                        :type :normal
+                                        :duration 1000
+                                        :message ""})
+      (timbre/spy))))

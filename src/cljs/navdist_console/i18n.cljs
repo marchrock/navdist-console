@@ -29,6 +29,9 @@
         {:apply "Apply"
          :cancel "Cancel"
          :shutdown "Shutdown"}
+        :screenshot
+        {:success "Screenshot saved!"
+         :failure "Screenshot failed."}
         }})
 
 ;; option for tempura
@@ -37,5 +40,6 @@
 
 (defn tr-nd
   [key]
+  (timbre/spy key)
   (let [locale (re-frame/subscribe [:config-locale])]
     (timbre/spy (tr opts [@locale :en] key))))

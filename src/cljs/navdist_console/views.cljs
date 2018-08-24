@@ -6,6 +6,7 @@
    [navdist-console.components.webview :refer [app-webview]]
    [navdist-console.panels.app-bar :refer [app-bar]]
    [navdist-console.panels.app-menu :refer [app-menu]]
+   [navdist-console.panels.notifications :refer [notification-panel]]
    ["material-ui" :as mui]
    ["material-ui/styles" :as mui-styles]
    ["material-ui/colors" :as mui-colors]
@@ -16,10 +17,6 @@
   (mui-styles/createMuiTheme))
 
 ;; panels
-(defn notification-bar
-  []
-  [:div])
-
 (defn left-info-panel
   []
   [:> mui/Grid {:container true :item true :direction "row"}
@@ -51,12 +48,12 @@
   []
   [:div
    [app-bar]
-   [app-menu]
-   [notification-bar]])
+   [app-menu]])
 
 (defn app-panel
   []
   [:> mui-styles/MuiThemeProvider {:theme app-theme}
    [top-panel]
    [main-panel]
-   [dialog-panel]])
+   [dialog-panel]
+   [notification-panel]])

@@ -15,7 +15,10 @@
                  :suffix ".png"
                  :time-format "yyyyMMdd-hhmmss"}}
    :state
-   {:notification {:open false :type :normal :message ""}
+   {:notification {:open false
+                   :type :normal
+                   :duration 1000
+                   :message ""}
     :volume true
     :app-menu {:open false}
     :dialog {:shutdown false}}}
