@@ -1,45 +1,62 @@
 (ns navdist-console.views
   (:require
    [re-frame.core :as re-frame]
-   [navdist-console.subs :as subs]
-   ))
+   [taoensso.timbre :as timbre]
+   [navdist-console.components.dialog :as dialog]
+   [navdist-console.components.webview :refer [app-webview]]
+   [navdist-console.panels.app-bar :refer [app-bar]]
+   [navdist-console.panels.app-menu :refer [app-menu]]
+   ["material-ui" :as mui]
+   ["material-ui/styles" :as mui-styles]
+   ["material-ui/colors" :as mui-colors]
+   ["material-ui-icons" :as mui-icons]))
 
+;; styles
+(def app-theme
+  (mui-styles/createMuiTheme))
 
-;; home
+;; panels
+(defn notification-bar
+  []
+  [:div])
 
-(defn home-panel []
-  (let [name (re-frame/subscribe [::subs/name])]
-    [:div
-     [:h1 (str "Hello from " @name ". This is the Home Page.")]
+(defn left-info-panel
+  []
+  [:> mui/Grid {:container true :item true :direction "row"}
+   [:div]])
 
-     [:div
-      [:a {:href "#/about"}
-       "go to About Page"]]
-     ]))
+(defn left-panel
+  []
+  [:> mui/Grid {:container true :item true :direction "column"}
+   [app-webview]
+   [left-info-panel]])
 
+(defn right-panel
+  []
+  [:> mui/Grid {:container true :item true}
+   [:div]])
 
-;; about
+(defn main-panel
+  []
+  [:> mui/Grid {:container true :direction "row"}
+   [left-panel]
+   [right-panel]])
 
-(defn about-panel []
+(defn dialog-panel
+  []
   [:div
-   [:h1 "This is the About Page."]
+   [dialog/confirm-shutdown]])
 
-   [:div
-    [:a {:href "#/"}
-     "go to Home Page"]]])
+(defn top-panel
+  []
+  [:div
+   [app-bar]
+   [app-menu]
+   [notification-bar]])
 
-
-;; main
-
-(defn- panels [panel-name]
-  (case panel-name
-    :home-panel [home-panel]
-    :about-panel [about-panel]
-    [:div]))
-
-(defn show-panel [panel-name]
-  [panels panel-name])
-
-(defn main-panel []
-  (let [active-panel (re-frame/subscribe [::subs/active-panel])]
-    [show-panel @active-panel]))
+(defn app-panel
+  []
+  [:> mui-styles/MuiThemeProvider {:theme app-theme}
+   [top-panel]
+   [main-panel]
+   [dialog-panel]])

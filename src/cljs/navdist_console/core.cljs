@@ -2,28 +2,29 @@
   (:require
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
-   [taoensso.timbre :as timbre :refer-macros [info]]
-   [navdist-console.main.events :as events]
-   [navdist-console.main.views :as views]
-   [navdist-console.routes :as routes]
+   [taoensso.timbre :as timbre]
    [navdist-console.config :as config]
+   [navdist-console.views :as views]
+   [navdist-console.cofx]
+   [navdist-console.events]
+   [navdist-console.subs]
    [navdist-console.i18n]
-   ))
+   [navdist-console.effects.core]))
 
 (defn dev-setup
   []
   (when config/debug?
     (enable-console-print!)
-    (println "dev mode")))
+    (timbre/debug "dev mode")))
 
 (defn initialize-dispatcher
   "Dispatch event which required after mouting root"
   []
-  (re-frame/dispatch [::events/initialize-webview]))
+  (re-frame/dispatch [:initialize-webview]))
 
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
-  (reagent/render [views/main-panel]
+  (reagent/render [views/app-panel]
                   (.getElementById js/document "app")))
 
 (defn reload-hook
@@ -36,8 +37,7 @@
 (defn ^:export init
   "entry point"
   []
-  (routes/app-routes)
-  (re-frame/dispatch-sync [::events/initialize-db])
+  (re-frame/dispatch-sync [:initialize-db])
   (dev-setup)
   (mount-root)
   (initialize-dispatcher))

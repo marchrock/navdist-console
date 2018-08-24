@@ -1,16 +1,15 @@
-(ns navdist-console.main.volume
+(ns navdist-console.effects.volume
   (:require
    [re-frame.core :as re-frame]
    [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
-   [taoensso.timbre :as timbre]
-   ))
+   [taoensso.timbre :as timbre]))
 
 (defn toggle-volume-handler
-  "Toggle volume of target webview provided by :toggle-volume-on or :toggle-volume-off effect handler"
+  "Toggle volume of target webview"
   [req]
-  (let [mute (:mute req)
+  (let [volume (:volume req)
         target-webview (:target-webview req)]
-    (.setAudioMuted target-webview mute)))
+    (.setAudioMuted target-webview (not volume))))
 
 (defn-traced toggle-volume-effect
   [req]
@@ -19,10 +18,5 @@
       toggle-volume-handler))
 
 (re-frame/reg-fx
- :toggle-volume-on
+ :toggle-volume
  toggle-volume-effect)
-
-(re-frame/reg-fx
- :toggle-volume-off
- toggle-volume-effect)
-

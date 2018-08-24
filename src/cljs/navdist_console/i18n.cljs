@@ -3,16 +3,15 @@
    [re-frame.core :as re-frame]
    [taoensso.tempura :as tempura :refer [tr]]
    [taoensso.timbre :as timbre]
-   [navdist-console.main.subs :as subs]
    ))
 
 (def app-name
   "Navdist Console")
 
 (def navdist-i18n-dictionary
-  {:ja {:global-menu
+  {:ja {:app-menu
         {:shutdown "終了"
-         :configure "設定"}
+         :settings "設定"}
         :dialog
         {:shutdown (str app-name " を終了しますか？")}
         :button
@@ -21,9 +20,9 @@
          :shutdown "終了"}
         }
 
-   :en {:global-menu
+   :en {:app-menu
         {:shutdown "Shutdown"
-         :configure "Configure"}
+         :settings "Settings"}
         :dialog
         {:shutdown (str "Shutdown " app-name " ?")}
         :button
@@ -38,5 +37,5 @@
 
 (defn tr-nd
   [key]
-  (let [locale (re-frame/subscribe [::subs/app-locale])]
+  (let [locale (re-frame/subscribe [:config-locale])]
     (timbre/spy (tr opts [@locale :en] key))))
