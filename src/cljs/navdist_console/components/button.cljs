@@ -38,7 +38,7 @@
   [:> mui/IconButton {:on-click #(>evt [:do-reload])
                       :color "inherit"
                       :disabled disabled?}
-   [:> mui-icons/Autorenew]])
+   [:> mui-icons/Refresh]])
 
 ;; string buttons
 (defn str-button
