@@ -16,30 +16,17 @@ Put this in your Emacs config file:
 
 Navigate to a clojurescript file and start a figwheel REPL with `cider-jack-in-clojurescript` or (`C-c M-J`)
 
-### Compile css:
-
-Compile css file once.
-
-```
-lein garden once
-```
-
-Automatically recompile css file on change.
-
-```
-lein garden auto
-```
-
 ### Run application:
 
 ```
-lein clean
 lein figwheel dev
+npm start
 ```
 
-Figwheel will automatically push cljs changes to the browser.
+`npm start` will start electron automatically and will connect to figwheel.
 
-Wait a bit, then browse to [http://localhost:3449](http://localhost:3449).
+Note: 2 terminal instance is required.
+
 
 ### Run tests:
 
@@ -60,7 +47,6 @@ lein doo chrome-headless test once
 Please note that [doo](https://github.com/bensu/doo) can be configured to run cljs.test in many JS environments (phantom, chrome, ie, safari, opera, slimer, node, rhino, or nashorn).
 
 ## Production Build
-
 
 To compile clojurescript to javascript:
 
