@@ -33,8 +33,22 @@
      [:> mui-icons/VolumeUp]
      [:> mui-icons/VolumeOff])])
 
+(defn reload
+  [disabled?]
+  [:> mui/IconButton {:on-click #(>evt [:do-reload])
+                      :color "inherit"
+                      :disabled disabled?}
+   [:> mui-icons/Autorenew]])
+
 ;; string buttons
 (defn str-button
   [string-key event-key & button-attr]
   [:> mui/Button (merge {:on-click #(>evt event-key)} (first button-attr))
    (i18n/tr-nd [string-key])])
+
+;; switch
+(defn switch-button
+  [checked? on-change-event]
+  [:> mui/Switch {:checked checked?
+                  :on-change #(>evt on-change-event)
+                  :color "inherit"}])

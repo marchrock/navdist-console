@@ -14,4 +14,8 @@
     [typography/app-title]
     [:div {:className "no-drag-region"}
      [button/screenshot]
-     [button/toggle-volume]]]])
+     [button/toggle-volume]
+     (let [reload-state (get-in (<sub [:state-app-bar]) [:reload-enabled])]
+       [:span
+        [button/switch-button reload-state [:toggle-app-bar-reload (not reload-state)]]
+        [button/reload (not reload-state)]])]]])

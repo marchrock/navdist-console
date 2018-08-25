@@ -39,3 +39,8 @@
  :state-app-notification
  (fn [db]
    (get-in db [:state :notification])))
+
+(re-frame/reg-sub
+ :state-app-bar
+ (fn [db]
+   (get-in db [:state :app-bar])))

@@ -21,10 +21,7 @@
   (let [wv (:main-webview cofx)
         db (:db cofx)
         wv-css (get-in db [:config :user-css])]
-    (timbre/spy cofx)
-    (timbre/spy wv)
-    (timbre/spy wv-css)
-    (.addEventListener wv "did-finish-load"
+    (.addEventListener wv "dom-ready"
                        (fn [] (.insertCSS wv wv-css))))))
 
 ;; close app
@@ -63,6 +60,17 @@
     {:toggle-volume {:volume (not volume) :target-webview wv}
      :db (assoc-in (:db cofx) [:state :volume] (not volume))})))
 
+(re-frame/reg-event-fx
+ :do-reload
+ [(re-frame/inject-cofx :main-webview)]
+ (fn-traced
+  [cofx _]
+  (let [db (:db cofx)
+        reload-state (get-in db [:state :app-bar :reload-enabled])
+        wv (:main-webview cofx)]
+    {:webview-reload {:target-webview wv}
+     :db (assoc-in db [:state :app-bar :reload-enabled] (not reload-state))})))
+
 ;; toggle app-menu state
 ;; toggle app menu open/close state
 (re-frame/reg-event-db
@@ -80,6 +88,14 @@
   [db [_ open?]]
   (-> db
       (update-in [:state :dialog] assoc :shutdown open?)
+      (timbre/spy))))
+
+(re-frame/reg-event-db
+ :toggle-app-bar-reload
+ (fn-traced
+  [db [_ v]]
+  (-> db
+      (assoc-in [:state :app-bar] {:reload-enabled v})
       (timbre/spy))))
 
 ;; success notification

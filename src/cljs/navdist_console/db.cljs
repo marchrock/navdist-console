@@ -3,6 +3,7 @@
 (defonce os (js/require "os"))
 
 ;;:uri "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"
+;;:uri "https://www.youtube.com/"
 ;; default db structure
 (def default-db
   {:config
@@ -21,5 +22,6 @@
                    :message ""}
     :volume true
     :app-menu {:open false}
-    :dialog {:shutdown false}}}
+    :dialog {:shutdown false}
+    :app-bar {:reload-enabled false}}}
    )

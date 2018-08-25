@@ -1,8 +1,13 @@
 (ns navdist-console.css
-  (:require [garden.def :refer [defstyles]]))
+  (:require
+   [garden.def :refer [defstyles]]
+   [garden.stylesheet :as garden-ss]))
 
 (defstyles screen
-  [:body {:margin 0 :padding 0 :border 0}]
+  (garden-ss/at-import
+   "https://fonts.googleapis.com/css?family=Roboto")
+  [:body {:margin 0 :padding 0 :border 0
+          :font-family "'Roboto', sans-serif"}]
   [:#global-app-bar {:-webkit-app-region "drag"}]
   [:#drag-region {:-webkit-app-region "drag"}]
   [:.no-drag-region {:-webkit-app-region "no-drag"}]

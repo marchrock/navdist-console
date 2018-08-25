@@ -2,5 +2,6 @@
   (:require
    [navdist-console.effects.shutdown]
    [navdist-console.effects.screenshot]
-   [navdist-console.effects.volume]))
+   [navdist-console.effects.volume]
+   [navdist-console.effects.reload]))
 
