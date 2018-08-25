@@ -6,6 +6,13 @@
    [navdist-console.components.typography :as typography]
    ["material-ui" :as mui]))
 
+(defn reloader
+  []
+  (let [reload-state (get-in (<sub [:state-app-bar]) [:reload-enabled])]
+    [:span
+     [button/switch-button reload-state [:toggle-app-bar-reload (not reload-state)]]
+     [button/reload (not reload-state)]]))
+
 (defn app-bar
   []
   [:> mui/AppBar {:id "global-app-bar" :position "static"}
@@ -15,7 +22,4 @@
     [:div {:className "no-drag-region"}
      [button/screenshot]
      [button/toggle-volume]
-     (let [reload-state (get-in (<sub [:state-app-bar]) [:reload-enabled])]
-       [:span
-        [button/switch-button reload-state [:toggle-app-bar-reload (not reload-state)]]
-        [button/reload (not reload-state)]])]]])
+     [reloader]]]])

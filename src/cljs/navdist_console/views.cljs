@@ -7,6 +7,7 @@
    [navdist-console.panels.app-bar :refer [app-bar]]
    [navdist-console.panels.app-menu :refer [app-menu]]
    [navdist-console.panels.notifications :refer [notification-panel]]
+   [navdist-console.panels.settings :refer [settings-panel]]
    ["material-ui" :as mui]
    ["material-ui/styles" :as mui-styles]
    ["material-ui/colors" :as mui-colors]
@@ -42,6 +43,7 @@
 (defn dialog-panel
   []
   [:div
+   [settings-panel]
    [dialog/confirm-shutdown]])
 
 (defn top-panel

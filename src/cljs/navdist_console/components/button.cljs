@@ -36,9 +36,15 @@
 (defn reload
   [disabled?]
   [:> mui/IconButton {:on-click #(>evt [:do-reload])
-                      :color "inherit"
-                      :disabled disabled?}
+                      :disabled disabled?
+                      :color "inherit"}
    [:> mui-icons/Refresh]])
+
+(defn close
+  [event-key]
+  [:> mui/IconButton {:on-click #(>evt [event-key false])
+                      :style menu-button-style}
+   [:> mui-icons/Close]])
 
 ;; string buttons
 (defn str-button
@@ -50,5 +56,4 @@
 (defn switch-button
   [checked? on-change-event]
   [:> mui/Switch {:checked checked?
-                  :on-change #(>evt on-change-event)
-                  :color "inherit"}])
+                  :on-change #(>evt on-change-event)}])

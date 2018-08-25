@@ -44,3 +44,8 @@
  :state-app-bar
  (fn [db]
    (get-in db [:state :app-bar])))
+
+(re-frame/reg-sub
+ :state-settings
+ (fn [db]
+   (get-in db [:state :settings])))

@@ -133,3 +133,20 @@
                                         :duration 1000
                                         :message ""})
       (timbre/spy))))
+
+;; toggle settings dialog open/close state
+(re-frame/reg-event-db
+ :toggle-settings
+ (fn-traced
+  [db [_ v]]
+  (-> db
+      (assoc-in [:state :settings] {:open v})
+      (timbre/spy))))
+
+(re-frame/reg-event-db
+ :settings-locale
+ (fn-traced
+  [db [_ v]]
+  (-> db
+      (assoc-in [:config :locale] (keyword v))
+      (timbre/spy))))

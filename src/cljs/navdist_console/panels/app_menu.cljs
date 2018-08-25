@@ -12,7 +12,7 @@
 (defn settings-item
   []
   [:> mui/ListItem {:button true
-                    :on-click #(>evt [:toggle-dialog-shutdown true])}
+                    :on-click #(>evt [:toggle-settings true])}
    [:> mui/ListItemIcon
     [:> mui-icons/Settings]]
    [:> mui/ListItemText {:primary (i18n/tr-nd [:app-menu/settings])}]])
