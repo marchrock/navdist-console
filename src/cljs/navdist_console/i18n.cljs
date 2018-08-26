@@ -25,11 +25,13 @@
    :en {:locale-name "English"
         :app-menu {:shutdown "Shutdown"
                    :settings "Settings"}
-        :settings {:locale "Locale"}
+        :settings {:locale "Locale"
+                   :screenshot-path "Screenshot Folder"}
         :dialog {:shutdown (str "Shutdown " app-name " ?")}
         :button {:apply "Apply"
                  :cancel "Cancel"
-                 :shutdown "Shutdown"}
+                 :shutdown "Shutdown"
+                 :change "Change"}
         :screenshot {:success "Screenshot saved!"
                      :failure "Screenshot failed."}
         }})

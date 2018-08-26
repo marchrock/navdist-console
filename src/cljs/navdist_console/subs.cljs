@@ -19,6 +19,11 @@
  (fn [db]
    (get-in db [:config :locale])))
 
+(re-frame/reg-sub
+ :config-screenshot
+ (fn [db]
+   (get-in db [:config :screenshot])))
+
 ;; state subs
 (re-frame/reg-sub
  :state-volume

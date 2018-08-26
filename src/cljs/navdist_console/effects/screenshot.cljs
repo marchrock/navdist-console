@@ -6,6 +6,7 @@
    [taoensso.timbre :as timbre]))
 
 (defonce fs (js/require "fs"))
+(defonce electron-dialog (-> (js/require "electron") .-remote .-dialog))
 
 (defn save-screenshot-to-file
   [img full-file-path on-success on-failure]
@@ -26,14 +27,23 @@
         on-failure (first (:on-failure req))]
     (.capturePage target-webview #(save-screenshot-to-file % full-file-path on-success on-failure))))
 
+(defn path-delimiter-check
+  [path]
+  (-> path
+      (as-> x (if (= (last x) "/")
+                x
+                (str x "/")))
+      (timbre/spy)))
+
 (defn create-file-path
   "Create file path of screenshot with provided info"
   [req]
   (timbre/spy req)
   (let [config (:config req)
         format (time-format/formatter (:time-format config))
-        ss-time (time-format/unparse format (:time req))]
-    (-> (str (:path config) (:prefix config) ss-time (:suffix config))
+        ss-time (time-format/unparse format (:time req))
+        formatted-path (path-delimiter-check (:path config))]
+    (-> (str formatted-path (:prefix config) ss-time (:suffix config))
         (as-> x (assoc req :full-file-path x))
         (timbre/spy))))
 
@@ -47,3 +57,18 @@
 (re-frame/reg-fx
  :webview-screenshot
  screenshot-handler)
+
+(defn screenshot-directory-selector
+  []
+  (.showOpenDialog electron-dialog nil (clj->js {:properties ["openDirectory"]})))
+
+(defn-traced screenshot-path-handler
+  [req]
+  (timbre/spy req)
+  (let [file-path (screenshot-directory-selector)]
+    (when (some? file-path)
+      (re-frame/dispatch [:settings-screenshot-path {:path (first file-path)}]))))
+
+(re-frame/reg-fx
+ :screenshot-path-dialog
+ screenshot-path-handler)

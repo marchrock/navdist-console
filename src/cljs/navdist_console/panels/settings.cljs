@@ -9,8 +9,11 @@
    ["material-ui" :as mui]
    ["material-ui-icons" :as mui-icons]))
 
-(def settings-textfield-style
-  (clj->js {:width 200 :marginRight 24}))
+(def settings-select-field-style
+  (clj->js {:width 200 :margin 8}))
+
+(def settings-path-field-style
+  (clj->js {:width 400 :margin 8}))
 
 (defn locale-menu-item
   [locale]
@@ -21,7 +24,7 @@
   []
   (let [current-locale (<sub [:config-locale])]
     (timbre/spy current-locale)
-    [:> mui/TextField {:style settings-textfield-style
+    [:> mui/TextField {:style settings-select-field-style
                        :select true
                        :value (name current-locale)
                        :on-change #(>evt [:settings-locale (-> % .-target .-value)])}
@@ -36,9 +39,22 @@
    [:> mui/ListItemSecondaryAction
     [locale-selector]]])
 
+(defn screenshot-settings
+  []
+  [:> mui/ListItem
+   [:> mui/ListItemIcon
+    [:> mui-icons/Folder]]
+   [:> mui/ListItemText {:primary (i18n/tr-nd [:settings/screenshot-path])}]
+   [:> mui/ListItemSecondaryAction
+    [:> mui/TextField {:style settings-path-field-style
+                       :value (get-in (<sub [:config-screenshot]) [:path])}]
+    [button/str-button :button/change [:open-screenshot-path-dialog]
+     {:color "primary" :variant "outlined" :style (clj->js {:margin 8})}]]])
+
 (defn settings-list
   []
-  [:> mui/List
+  [:> mui/List {:style (clj->js {:margin 8})}
+   [screenshot-settings]
    [locale-settings]])
 
 (defn settings-panel-top-bar

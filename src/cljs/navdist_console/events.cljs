@@ -71,6 +71,12 @@
     {:webview-reload {:target-webview wv}
      :db (assoc-in db [:state :app-bar :reload-enabled] (not reload-state))})))
 
+(re-frame/reg-event-fx
+ :open-screenshot-path-dialog
+ (fn-traced
+  [cofx _]
+  {:screenshot-path-dialog {:current-dir (get-in cofx [:db :config :screenshot :path])}}))
+
 ;; toggle app-menu state
 ;; toggle app menu open/close state
 (re-frame/reg-event-db
@@ -149,4 +155,12 @@
   [db [_ v]]
   (-> db
       (assoc-in [:config :locale] (keyword v))
+      (timbre/spy))))
+
+(re-frame/reg-event-db
+ :settings-screenshot-path
+ (fn-traced
+  [db [_ v]]
+  (-> db
+      (assoc-in [:config :screenshot :path] (:path v))
       (timbre/spy))))
