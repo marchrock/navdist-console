@@ -20,7 +20,8 @@
 (defn initialize-dispatcher
   "Dispatch event which required after mouting root"
   []
-  (re-frame/dispatch [:initialize-webview]))
+  (re-frame/dispatch [:initialize-webview])
+  (re-frame/dispatch [:update-db-persist]))
 
 (defn mount-root []
   (re-frame/clear-subscription-cache!)

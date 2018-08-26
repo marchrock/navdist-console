@@ -1,5 +1,6 @@
 (ns navdist-console.events
   (:require
+   [cljs.reader :as reader]
    [re-frame.core :as re-frame]
    [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
    [navdist-console.db :as db]
@@ -11,6 +12,20 @@
  (fn-traced
   [_ _]
   db/default-db))
+
+(re-frame/reg-event-fx
+ :update-db-persist
+ [(re-frame/inject-cofx :user-data-dir)]
+ (fn-traced
+  [cofx [_ v]]
+  {:read-edn {:user-data-dir (:user-data-dir cofx)}}))
+
+(re-frame/reg-event-db
+ :update-db-edn
+ (fn-traced
+  [db [_ v]]
+  (let [parsed-config (reader/read-string (str (:file-db v)))]
+    (timbre/spy (assoc-in db [:config] parsed-config)))))
 
 ;; initialize webview event to inject css to show only game screen in webview
 (re-frame/reg-event-fx
@@ -141,13 +156,18 @@
       (timbre/spy))))
 
 ;; toggle settings dialog open/close state
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  :toggle-settings
+ [(re-frame/inject-cofx :user-data-dir)]
  (fn-traced
-  [db [_ v]]
-  (-> db
-      (assoc-in [:state :settings] {:open v})
-      (timbre/spy))))
+  [cofx [_ v]]
+  (let [db (:db cofx)]
+    (timbre/spy v)
+    (if v
+      {:db (assoc-in db [:state :settings :open] v)}
+      {:db (assoc-in db [:state :settings :open] v)
+       :write-edn {:config (:config db)
+                   :user-data-dir (:user-data-dir cofx)}}))))
 
 (re-frame/reg-event-db
  :settings-locale

@@ -29,3 +29,13 @@
  (fn-traced
   [cofx _]
   (assoc cofx :now (time/now))))
+
+;; get userdata directory
+(re-frame/reg-cofx
+ :user-data-dir
+ (fn-traced
+  [cofx]
+  (let [electron (js/require "electron")
+        remote (.-remote electron)
+        app (.-app remote)]
+    (assoc cofx :user-data-dir (.getPath app "userData")))))

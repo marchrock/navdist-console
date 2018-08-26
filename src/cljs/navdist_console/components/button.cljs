@@ -43,7 +43,8 @@
 (defn close
   [event-key]
   [:> mui/IconButton {:on-click #(>evt [event-key false])
-                      :style menu-button-style}
+                      :style menu-button-style
+                      :color "inherit"}
    [:> mui-icons/Close]])
 
 ;; string buttons
