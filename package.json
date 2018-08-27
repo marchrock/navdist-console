@@ -7,8 +7,8 @@
     "test": "test"
   },
   "scripts": {
-      "start": "lein garden once && electron .",
-      "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "lein garden once && electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,11 @@
   "homepage": "https://github.com/marchrock/navdist-console#readme",
   "dependencies": {
     "electron": "^2.0.7"
+  },
+  "devDependencies": {
+    "karma": "^3.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-cljs-test": "^0.1.0",
+    "karma-electron-launcher": "^0.2.0"
   }
 }

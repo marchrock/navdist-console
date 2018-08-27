@@ -39,3 +39,11 @@
         remote (.-remote electron)
         app (.-app remote)]
     (assoc cofx :user-data-dir (.getPath app "userData")))))
+
+;; get os home-dir
+(re-frame/reg-cofx
+ :os-home-dir
+ (fn-traced
+  [cofx]
+  (let [os (js/require "os")]
+    (assoc cofx :os-home-dir (.homedir os)))))

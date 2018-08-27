@@ -6,27 +6,47 @@
    [navdist-console.db :as db]
    [taoensso.timbre :as timbre]))
 
+; db store preparations
 ;; initializing db
-(re-frame/reg-event-db
+(defn-traced initialize-db
+  [cofx _]
+  (let [home-dir (:os-home-dir cofx)
+        db (:db cofx)]
+    (timbre/spy
+    (if (nil? home-dir)
+      {:db db/default-db}
+      {:db (assoc-in db/default-db [:config :screenshot :path] (str home-dir "/Downloads/"))}))))
+
+(re-frame/reg-event-fx
  :initialize-db
- (fn-traced
-  [_ _]
-  db/default-db))
+ [(re-frame/inject-cofx :os-home-dir)]
+ initialize-db)
+
+;; read persisted db from file
+(defn-traced update-db-persist
+  [cofx _]
+  (timbre/spy cofx)
+  {:read-edn {:user-data-dir (:user-data-dir cofx)}})
 
 (re-frame/reg-event-fx
  :update-db-persist
  [(re-frame/inject-cofx :user-data-dir)]
- (fn-traced
-  [cofx [_ v]]
-  {:read-edn {:user-data-dir (:user-data-dir cofx)}}))
+ update-db-persist)
+
+;; updateing
+(defn-traced update-db-from-edn
+  [db [_ v]]
+  (-> (:file-db v)
+      str
+      reader/read-string
+      (as-> x (assoc-in db [:config] x))
+      timbre/spy))
 
 (re-frame/reg-event-db
  :update-db-edn
- (fn-traced
-  [db [_ v]]
-  (let [parsed-config (reader/read-string (str (:file-db v)))]
-    (timbre/spy (assoc-in db [:config] parsed-config)))))
+ update-db-from-edn)
 
+; webview preparations
 ;; initialize webview event to inject css to show only game screen in webview
 (re-frame/reg-event-fx
  :initialize-webview
