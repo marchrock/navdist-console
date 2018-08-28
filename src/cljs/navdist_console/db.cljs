@@ -22,5 +22,4 @@
     :app-menu {:open false}
     :dialog {:shutdown false}
     :app-bar {:reload-enabled false}
-    :settings {:open false}}}
-   )
+    :settings {:open false}}})

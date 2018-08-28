@@ -15,11 +15,15 @@
   {:ja {:locale-name "日本語"
         :app-menu {:shutdown "終了"
                    :settings "設定"}
-        :settings {:locale "言語設定"}
+        :settings {:locale "言語設定"
+                   :screenshot-path "スクリーンショット保存フォルダ"}
         :dialog {:shutdown (str app-name " を終了しますか？")}
         :button {:apply "適用"
                  :cancel "キャンセル"
-                 :shutdown "終了"}
+                 :shutdown "終了"
+                 :change "変更"}
+        :screenshot {:success "スクリーンショットを保存しました"
+                     :failure "スクリーンショットの保存に失敗しました"}
         }
 
    :en {:locale-name "English"
@@ -38,13 +42,14 @@
 
 ;; option for tempura
 (def opts
-  {:dict navdist-i18n-dictionary})
+  {:dict navdist-i18n-dictionary
+   :default-locale :en})
 
 (defn tr-nd
   [key]
   (timbre/spy key)
   (let [locale (re-frame/subscribe [:config-locale])]
-    (timbre/spy (tr opts [@locale :en] key))))
+    (timbre/spy (tr opts [@locale] key))))
 
 (defn tr-lc
   [key locale]
