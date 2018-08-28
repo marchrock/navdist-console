@@ -21,7 +21,7 @@
           cofx {:db db :user-data-dir user-data-dir}
           event [:update-db-persist]
           result (sut/update-db-persist cofx event)]
-      (t/is (= (contains? result :read-edn)))
+      (t/is (contains? result :read-edn))
       (t/is (= (get-in result [:read-edn :user-data-dir]) user-data-dir)))))
 
 (t/deftest update-db-edn
@@ -33,3 +33,14 @@
           result (sut/update-db-from-edn db event)]
       (t/is (= (:config result) test-db)))))
 
+(t/deftest initialize-webview
+  (t/testing "test injecting css"
+    (let [test-db (sut/initialize-db {} [:initialize-db])
+          webview-mock ["webview"]
+          cofx {:db test-db :main-webview webview-mock}
+          event [:initialize-webview]
+          result (sut/initialize-webview cofx event)]
+      (t/is (contains? result :webview-injectcss))
+      (t/is (= (get-in result [:webview-injectcss :target-webview]) webview-mock))
+      (t/is (= (get-in result [:webview-injectcss :user-css])
+               (get-in test-db [:config :user-css]))))))
