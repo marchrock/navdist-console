@@ -19,10 +19,11 @@
 (defn read-from-file
   [req]
   (let [full-file-path (str (:user-data-dir req) "/" settings-file-name)]
-    (.readFile fs full-file-path (fn [err data]
-                                   (if err
-                                     (timbre/error err)
-                                     (re-frame/dispatch [:update-db-edn {:file-db data}]))))))
+    (.readFile fs full-file-path
+               (fn [err data]
+                 (if err
+                   (timbre/error err)
+                   (re-frame/dispatch [:update-db-edn {:file-db data}]))))))
 
 (defn parse-config-filter
   [req]

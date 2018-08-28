@@ -13,7 +13,7 @@
   (clj->js {:width 200 :margin 8}))
 
 (def settings-path-field-style
-  (clj->js {:width 400 :margin 8}))
+  (clj->js {:width 300 :margin 8}))
 
 (defn locale-menu-item
   [locale]
@@ -51,11 +51,39 @@
     [button/str-button :button/change [:open-screenshot-path-dialog]
      {:color "primary" :variant "outlined" :style (clj->js {:margin 8})}]]])
 
+(def zoom-factors
+  [{:factor 100 :label "100%"}
+   {:factor 75 :label "75%"}
+   {:factor 66 :label "66%"}])
+
+(defn zoom-factor-item
+  [zoom-factor]
+  [:> mui/MenuItem {:key (str "zoom-factor-" (:factor zoom-factor)) :value (:factor zoom-factor)}
+   (:label zoom-factor)])
+
+(defn zoom-factor-selector
+  []
+  [:> mui/TextField {:style settings-select-field-style
+                     :select true
+                     :value (<sub [:config-zoom-factor])
+                     :on-change #(>evt [:settings-zoom-factor (-> % .-target .-value)])}
+   (map #(zoom-factor-item %) zoom-factors)])
+
+(defn zoom-factor-settings
+  []
+  [:> mui/ListItem
+   [:> mui/ListItemIcon
+    [:> mui-icons/ZoomIn]]
+   [:> mui/ListItemText {:primary (i18n/tr-nd [:settings/zoom-factor])}]
+   [:> mui/ListItemSecondaryAction
+    [zoom-factor-selector]]])
+
 (defn settings-list
   []
   [:> mui/List {:style (clj->js {:margin 8})}
    [screenshot-settings]
-   [locale-settings]])
+   [locale-settings]
+   [zoom-factor-settings]])
 
 (defn settings-panel-top-bar
   []

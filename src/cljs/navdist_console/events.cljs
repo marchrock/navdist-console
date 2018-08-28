@@ -35,15 +35,21 @@
 
 ;; updateing
 (defn-traced update-db-from-edn
-  [db [_ v]]
-  (-> (:file-db v)
-      str
-      reader/read-string
-      (as-> x (assoc-in db [:config] x))
-      timbre/spy))
+  [cofx [_ v]]
+  (timbre/spy v)
+  (let [db (:db cofx)
+        update-db (-> (:file-db v)
+                      str
+                      reader/read-string
+                      (as-> x (update-in db [:config] conj x))
+                      timbre/spy)]
+    {:db update-db
+     :resize-electron-window {:current-window (:current-app cofx)
+                              :zoom-factor (get-in update-db [:config :zoom-factor])}}))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
  :update-db-edn
+ [(re-frame/inject-cofx :current-app)]
  update-db-from-edn)
 
 ; webview preparations
@@ -204,3 +210,19 @@
   (-> db
       (assoc-in [:config :screenshot :path] (:path v))
       (timbre/spy))))
+
+;; settings zoom factor
+(defn-traced settings-zoom-factor
+  [cofx [_ v]]
+  (let [db (:db cofx)]
+    {:apply-zoom-factor {:target-webview (:main-webview cofx)
+                         :zoom-factor v}
+     :resize-electron-window {:current-window (:current-app cofx)
+                              :zoom-factor v}
+     :db (assoc-in db [:config :zoom-factor] v)}))
+
+(re-frame/reg-event-fx
+ :settings-zoom-factor
+ [(re-frame/inject-cofx :main-webview)
+  (re-frame/inject-cofx :current-app)]
+ settings-zoom-factor)

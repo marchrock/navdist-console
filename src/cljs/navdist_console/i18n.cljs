@@ -30,7 +30,8 @@
         :app-menu {:shutdown "Shutdown"
                    :settings "Settings"}
         :settings {:locale "Locale"
-                   :screenshot-path "Screenshot Folder"}
+                   :screenshot-path "Screenshot Folder"
+                   :zoom-factor "Zoom Factor"}
         :dialog {:shutdown (str "Shutdown " app-name " ?")}
         :button {:apply "Apply"
                  :cancel "Cancel"

@@ -24,6 +24,11 @@
  (fn [db]
    (get-in db [:config :screenshot])))
 
+(re-frame/reg-sub
+ :config-zoom-factor
+ (fn [db]
+   (get-in db [:config :zoom-factor])))
+
 ;; state subs
 (re-frame/reg-sub
  :state-volume

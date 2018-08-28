@@ -5,5 +5,6 @@
    [navdist-console.effects.volume]
    [navdist-console.effects.reload]
    [navdist-console.effects.persist]
-   [navdist-console.effects.webview]))
+   [navdist-console.effects.webview]
+   [navdist-console.effects.window]))
 
