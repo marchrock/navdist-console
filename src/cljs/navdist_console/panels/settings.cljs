@@ -5,6 +5,7 @@
    [navdist-console.i18n :as i18n]
    [navdist-console.components.button :as button]
    [navdist-console.components.typography :as typography]
+   [navdist-console.components.selector :as selector]
    [taoensso.timbre :as timbre]
    ["material-ui" :as mui]
    ["material-ui-icons" :as mui-icons]))
@@ -56,18 +57,10 @@
    {:factor 75 :label "75%"}
    {:factor 66 :label "66%"}])
 
-(defn zoom-factor-item
-  [zoom-factor]
-  [:> mui/MenuItem {:key (str "zoom-factor-" (:factor zoom-factor)) :value (:factor zoom-factor)}
-   (:label zoom-factor)])
-
-(defn zoom-factor-selector
-  []
-  [:> mui/TextField {:style settings-select-field-style
-                     :select true
-                     :value (<sub [:config-zoom-factor])
-                     :on-change #(>evt [:settings-zoom-factor (-> % .-target .-value)])}
-   (map #(zoom-factor-item %) zoom-factors)])
+(def zoom-factor-xf
+  (map #(hash-map :key (str "zoom-factor-" (:factor %))
+                  :value (:factor %)
+                  :label (:label %))))
 
 (defn zoom-factor-settings
   []
@@ -76,7 +69,10 @@
     [:> mui-icons/ZoomIn]]
    [:> mui/ListItemText {:primary (i18n/tr-nd [:settings/zoom-factor])}]
    [:> mui/ListItemSecondaryAction
-    [zoom-factor-selector]]])
+    [selector/normal {:style settings-select-field-style
+                      :value-sub [:config-zoom-factor]
+                      :change-event :settings-zoom-factor
+                      :items (transduce zoom-factor-xf conj zoom-factors)}]]])
 
 (defn settings-list
   []
