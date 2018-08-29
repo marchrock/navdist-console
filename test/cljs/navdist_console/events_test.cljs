@@ -28,10 +28,11 @@
   (t/testing "test updating db by loaded edn"
     (let [test-db {:test {:alpha "able" :bravo "baker"}}
           pr-test-db (pr-str test-db)
-          db {}
+          db {:config {}}
+          cofx {:db db}
           event [:update-db-edn {:file-db pr-test-db}]
-          result (sut/update-db-from-edn db event)]
-      (t/is (= (:config result) test-db)))))
+          result (sut/update-db-from-edn cofx event)]
+      (t/is (= (get-in result [:db :config]) test-db)))))
 
 (t/deftest initialize-webview
   (t/testing "test injecting css"
