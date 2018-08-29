@@ -1,6 +1,7 @@
 # navdist-console
 Navdist Console - Better console to rule the wave.
 
+[![CircleCI](https://circleci.com/gh/marchrock/navdist-console.svg?style=svg)](https://circleci.com/gh/marchrock/navdist-console)
 ## Development Mode
 
 ### Start Cider from Emacs:
