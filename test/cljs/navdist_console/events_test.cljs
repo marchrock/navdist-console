@@ -2,7 +2,8 @@
   (:require [navdist-console.events :as sut]
             [navdist-console.db :as ndb]
             [cljs.test :as t :include-macros true]
-            [cljs-time.core :as time]))
+            [cljs-time.core :as time]
+            [taoensso.timbre :as timbre]))
 
 (t/deftest initialize-db
   (t/testing "test initialize db"
@@ -103,3 +104,40 @@
       (t/is (= (get-in result [:webview-reload :target-webview]) mock-webview))
       (t/is (= (get-in result [:db :state :app-bar :reload-enabled])
                (not (get-in db [:state :app-bar :reload-enabled])))))))
+
+(t/deftest open-screenshot-path-dialog
+  (t/testing "test opening screenshot path selecting dialog"
+    (let [db (sut/initialize-db {} [:initialize-db])
+          cofx {:db db}
+          event [:open-screenshot-path-dialog]
+          result (sut/open-screenshot-path-dialog cofx event)]
+      (t/is (contains? result :screenshot-path-dialog))
+      (t/is (= (get-in result [:screenshot-path-dialog :current-dir])
+               (get-in db [:config :screenshot :path]))))))
+
+(t/deftest toggle-app-menu
+  (t/testing "test app menu toggling open"
+    (let [db {:state {:app-menu {:open true}}}
+          open-state true
+          event [:toggle-app-menu open-state]
+          result (sut/toggle-app-menu db event)]
+      (t/is (= (get-in result [:state :app-menu :open]) open-state))))
+  (t/testing "test app menu toggling close"
+    (let [db {:state {:app-menu {:open true}}}
+          open-state false
+          event [:toggle-app-menu open-state]
+          result (sut/toggle-app-menu db event)]
+      (t/is (= (get-in result [:state :app-menu :open]) open-state)))))
+
+(t/deftest toggle-dialog-shutdown
+  (let [db {:state {:dialog {:shutdown true}}}]
+    (t/testing "test shutdown dialog open status"
+      (let [open-state true
+            event [:toggle-dialog-shutdown open-state]
+            result (sut/toggle-dialog-shutdown db event)]
+        (t/is (= (get-in result [:state :dialog :shutdown]) open-state))))
+    (t/testing "test shutdown dialog close status"
+      (let [open-state false
+            event [:toggle-dialog-shutdown open-state]
+            result (sut/toggle-dialog-shutdown db event)]
+        (t/is (= (get-in result [:state :dialog :shutdown]) open-state))))))

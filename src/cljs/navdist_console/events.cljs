@@ -125,29 +125,35 @@
 
 ;; state
 ;; open directory dialog to change screenshot saving directory
+(defn-traced open-screenshot-path-dialog
+  [cofx _]
+  {:screenshot-path-dialog {:current-dir (get-in cofx [:db :config :screenshot :path])}})
+
 (re-frame/reg-event-fx
  :open-screenshot-path-dialog
- (fn-traced
-  [cofx _]
-  {:screenshot-path-dialog {:current-dir (get-in cofx [:db :config :screenshot :path])}}))
+ open-screenshot-path-dialog)
 
 ;; toggle app menu open/close state
-(re-frame/reg-event-db
- :toggle-app-menu
- (fn-traced
+(defn-traced toggle-app-menu
   [db [_ open?]]
   (-> db
       (update-in [:state :app-menu] assoc :open open?)
-      (timbre/spy))))
+      (timbre/spy)))
+
+(re-frame/reg-event-db
+ :toggle-app-menu
+ toggle-app-menu)
 
 ;; toggle shutdown dialog open/close state
-(re-frame/reg-event-db
- :toggle-dialog-shutdown
- (fn-traced
+(defn-traced toggle-dialog-shutdown
   [db [_ open?]]
   (-> db
       (update-in [:state :dialog] assoc :shutdown open?)
-      (timbre/spy))))
+      (timbre/spy)))
+
+(re-frame/reg-event-db
+ :toggle-dialog-shutdown
+ toggle-dialog-shutdown)
 
 (re-frame/reg-event-db
  :toggle-app-bar-reload
