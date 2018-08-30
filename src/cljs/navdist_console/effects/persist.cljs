@@ -23,7 +23,7 @@
                (fn [err data]
                  (if err
                    (timbre/error err)
-                   (re-frame/dispatch [:update-db-edn {:file-db data}]))))))
+                   (re-frame/dispatch [:initialize-last {:file-db data}]))))))
 
 (defn parse-config-filter
   [req]

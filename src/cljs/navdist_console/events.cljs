@@ -6,7 +6,7 @@
    [navdist-console.db :as db]
    [taoensso.timbre :as timbre]))
 
-; db store preparations
+;; db store preparations
 ;; initializing db
 (defn-traced initialize-db
   [cofx _]
@@ -34,7 +34,7 @@
  update-db-persist)
 
 ;; updateing
-(defn-traced update-db-from-edn
+(defn-traced initialize-last
   [cofx [_ v]]
   (timbre/spy v)
   (let [db (:db cofx)
@@ -48,11 +48,11 @@
                               :zoom-factor (get-in update-db [:config :zoom-factor])}}))
 
 (re-frame/reg-event-fx
- :update-db-edn
+ :initialize-last
  [(re-frame/inject-cofx :current-app)]
- update-db-from-edn)
+ initialize-last)
 
-; webview preparations
+;; webview preparations
 ;; initialize webview event to inject css to show only game screen in webview
 (defn-traced initialize-webview
   [cofx _]
@@ -66,20 +66,19 @@
  initialize-webview)
 
 ;; close app
+(defn-traced close-app
+  [cofx v]
+  {:shutdown-app {:current-app (:current-app cofx)}})
+
 (re-frame/reg-event-fx
  :close-app
  [(re-frame/inject-cofx :current-app)]
- (fn-traced
-  [cofx _]
-  {:shutdown-app {:current-app (:current-app cofx)}}))
+ close-app)
 
 ;; effecter
-(re-frame/reg-event-fx
- :take-screenshot
- [(re-frame/inject-cofx :main-webview)
-  (re-frame/inject-cofx :now)]
- (fn-traced
-  [cofx _]
+;; take screenshot of webview
+(defn-traced take-screenshot
+ [cofx _]
   (let [db (:db cofx)
         ss-config (get-in db [:config :screenshot])
         wv (:main-webview cofx)
@@ -89,36 +88,49 @@
       :target-webview wv
       :time ss-time
       :on-success [:notify-success]
-      :on-failure [:notify-failure]}})))
+      :on-failure [:notify-failure]}}))
 
 (re-frame/reg-event-fx
- :toggle-volume-state
- [(re-frame/inject-cofx :main-webview)]
- (fn-traced
+ :take-screenshot
+ [(re-frame/inject-cofx :main-webview)
+  (re-frame/inject-cofx :now)]
+ take-screenshot)
+
+;; toggle volume on/mute of webview
+(defn-traced toggle-volume-state
   [cofx _]
   (let [volume (get-in cofx [:db :state :volume])
         wv (:main-webview cofx)]
     {:toggle-volume {:volume (not volume) :target-webview wv}
-     :db (assoc-in (:db cofx) [:state :volume] (not volume))})))
+     :db (assoc-in (:db cofx) [:state :volume] (not volume))}))
 
 (re-frame/reg-event-fx
- :do-reload
+ :toggle-volume-state
  [(re-frame/inject-cofx :main-webview)]
- (fn-traced
+ toggle-volume-state)
+
+;; do reload of webview
+(defn-traced do-reload
   [cofx _]
   (let [db (:db cofx)
         reload-state (get-in db [:state :app-bar :reload-enabled])
         wv (:main-webview cofx)]
     {:webview-reload {:target-webview wv}
-     :db (assoc-in db [:state :app-bar :reload-enabled] (not reload-state))})))
+     :db (assoc-in db [:state :app-bar :reload-enabled] (not reload-state))}))
 
+(re-frame/reg-event-fx
+ :do-reload
+ [(re-frame/inject-cofx :main-webview)]
+ do-reload)
+
+;; state
+;; open directory dialog to change screenshot saving directory
 (re-frame/reg-event-fx
  :open-screenshot-path-dialog
  (fn-traced
   [cofx _]
   {:screenshot-path-dialog {:current-dir (get-in cofx [:db :config :screenshot :path])}}))
 
-;; toggle app-menu state
 ;; toggle app menu open/close state
 (re-frame/reg-event-db
  :toggle-app-menu

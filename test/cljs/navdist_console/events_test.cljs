@@ -1,7 +1,8 @@
 (ns navdist-console.events-test
   (:require [navdist-console.events :as sut]
             [navdist-console.db :as ndb]
-            [cljs.test :as t :include-macros true]))
+            [cljs.test :as t :include-macros true]
+            [cljs-time.core :as time]))
 
 (t/deftest initialize-db
   (t/testing "test initialize db"
@@ -30,9 +31,18 @@
           pr-test-db (pr-str test-db)
           db {:config {}}
           cofx {:db db}
-          event [:update-db-edn {:file-db pr-test-db}]
-          result (sut/update-db-from-edn cofx event)]
-      (t/is (= (get-in result [:db :config]) test-db)))))
+          event [:initialize-last {:file-db pr-test-db}]
+          result (sut/initialize-last cofx event)]
+      (t/is (= (get-in result [:db :config]) test-db))))
+  (t/testing "test electron window resize"
+    (let [test-db {:zoom 0.75}
+          pr-test-db (pr-str test-db)
+          mock-current-app ["current-app"]
+          cofx {:db {:config {}} :current-app mock-current-app}
+          event [:initialize-last {:file-db pr-test-db}]
+          result (sut/initialize-last cofx event)]
+      (t/is (contains? result :resize-electron-window))
+      (t/is (= (get-in result [:resize-electron-window :current-window]) mock-current-app)))))
 
 (t/deftest initialize-webview
   (t/testing "test injecting css"
@@ -45,3 +55,51 @@
       (t/is (= (get-in result [:webview-injectcss :target-webview]) webview-mock))
       (t/is (= (get-in result [:webview-injectcss :user-css])
                (get-in test-db [:config :user-css]))))))
+
+(t/deftest close-app
+  (t/testing "test close app"
+    (let [db (sut/initialize-db {} [:initialize-db])
+          mock-current-app ["current-app"]
+          cofx {:db db :current-app mock-current-app}
+          event [:close-app]
+          result (sut/close-app cofx event)]
+      (t/is (contains? result :shutdown-app))
+      (t/is (= (get-in result [:shutdown-app :current-app]) mock-current-app)))))
+
+(t/deftest take-screenshot
+  (t/testing "test take screenshot"
+    (let [db (sut/initialize-db {} [:initialize-db])
+          current-time (time/now)
+          mock-webview ["mock-webview"]
+          cofx {:db db :now current-time :main-webview mock-webview}
+          event [:take-screenshot]
+          result (sut/take-screenshot cofx event)]
+      (t/is (contains? result :webview-screenshot))
+      (t/is (= (get-in result [:webview-screenshot :target-webview]) mock-webview))
+      (t/is (= (get-in result [:webview-screenshot :time]) current-time)))))
+
+(t/deftest toggle-volume-state
+  (t/testing "test toggle volume state"
+    (let [db (sut/initialize-db {} [:initialize-db])
+          mock-webview ["mock-webview"]
+          cofx {:db db :main-webview mock-webview}
+          event [:toggle-volume-state]
+          result (sut/toggle-volume-state cofx event)]
+      (t/is (contains? result :toggle-volume))
+      (t/is (contains? result :db))
+      (t/is (= (get-in result [:toggle-volume :volume]) (not (get-in db [:state :volume]))))
+      (t/is (= (get-in result [:toggle-volume :target-webview]) mock-webview))
+      (t/is (= (get-in result [:db :state :volume]) (not (get-in db [:state :volume])))))))
+
+(t/deftest do-reload
+  (t/testing "test do reload of webview"
+    (let [db (sut/initialize-db {} [:initialize-db])
+          mock-webview ["mock-webview"]
+          cofx {:db db :main-webview mock-webview}
+          event [:do-reload]
+          result (sut/do-reload cofx event)]
+      (t/is (contains? result :webview-reload))
+      (t/is (contains? result :db))
+      (t/is (= (get-in result [:webview-reload :target-webview]) mock-webview))
+      (t/is (= (get-in result [:db :state :app-bar :reload-enabled])
+               (not (get-in db [:state :app-bar :reload-enabled])))))))
