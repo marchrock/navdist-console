@@ -12,7 +12,7 @@
     :screenshot {:path "~/Downloads/"
                  :prefix "navdist-"
                  :suffix ".png"
-                 :time-format "yyyyMMdd-hhmmss"}
+                 :time-format "yyyyMMdd-HHmmssZZ"}
     :zoom-factor 100}
    :state
    {:notification {:open false
