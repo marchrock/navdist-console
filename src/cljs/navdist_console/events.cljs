@@ -155,49 +155,52 @@
  :toggle-dialog-shutdown
  toggle-dialog-shutdown)
 
-(re-frame/reg-event-db
- :toggle-app-bar-reload
- (fn-traced
+;; toggle app bar danger zone
+(defn-traced toggle-app-bar-reload
   [db [_ v]]
   (-> db
       (assoc-in [:state :app-bar] {:reload-enabled v})
-      (timbre/spy))))
+      (timbre/spy)))
 
-;; success notification
+(re-frame/reg-event-db
+ :toggle-app-bar-reload
+ toggle-app-bar-reload)
+
+;; notification
+(def default-notify-state {:open false
+                           :type :normal
+                           :duration 1000
+                           :message ""})
+
+(defn notify-state
+  [v]
+  {:open true
+   :type (if (= :notify-success (:event v)) :normal :error)
+   :duration 2000
+   :message (:msg v)})
+
+(defn-traced notification-event
+  [db v]
+  (let [notify-state (cond (= (first v) :close-notification) default-notify-state
+                           :else (notify-state {:event (first v) :msg (:msg (second v))}))]
+    (-> db
+        (assoc-in [:state :notification] notify-state)
+        (timbre/spy))))
+
+;; notify success
 (re-frame/reg-event-db
  :notify-success
- (fn-traced
-  [db [_ v]]
-  (-> db
-      (assoc-in [:state :notification] {:open true
-                                        :type :normal
-                                        :duration 2000
-                                        :message (:msg v)})
-      (timbre/spy))))
+ notification-event)
 
 ;; notify failure
 (re-frame/reg-event-db
  :notify-failure
- (fn-traced
-  [db [_ v]]
-  (-> db
-      (assoc-in [:state :notification] {:open true
-                                        :type :error
-                                        :duration 2000
-                                        :message (:msg v)})
-      (timbre/spy))))
+ notification-event)
 
 ;; close notification snackbar
 (re-frame/reg-event-db
  :close-notification
- (fn-traced
-  [db _]
-  (-> db
-      (assoc-in [:state :notification] {:open false
-                                        :type :normal
-                                        :duration 1000
-                                        :message ""})
-      (timbre/spy))))
+ notification-event)
 
 ;; toggle settings dialog open/close state
 (re-frame/reg-event-fx

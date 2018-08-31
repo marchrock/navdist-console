@@ -141,3 +141,45 @@
             event [:toggle-dialog-shutdown open-state]
             result (sut/toggle-dialog-shutdown db event)]
         (t/is (= (get-in result [:state :dialog :shutdown]) open-state))))))
+
+(t/deftest toggle-app-bar-danger-zone
+  (let [db {:state {:app-bar {:reload-enabled true}}}]
+    (t/testing "test app-bar danger zone enabled"
+      (let [state true
+            event [:toggle-app-bar-reload state]
+            result (sut/toggle-app-bar-reload db event)]
+        (t/is (= (get-in result [:state :app-bar :reload-enabled]) state))))
+    (t/testing "test app-bar danger zone disabled"
+      (let [state false
+            event [:toggle-app-bar-reload state]
+            result (sut/toggle-app-bar-reload db event)]
+        (t/is (= (get-in result [:state :app-bar :reload-enabled]) state))))))
+
+(t/deftest notification
+  (let [db {:state {:notification {:open false :type :normal :duration 1000 :message ""}}}]
+    (t/testing "test successful notification"
+      (let [notify-message "success"
+            notify-state {:open true
+                          :type :normal
+                          :duration 2000
+                          :message notify-message}
+            event [:notify-success {:msg notify-message}]
+            result (sut/notification-event db event)]
+        (t/is (= (get-in result [:state :notification]) notify-state))))
+    (t/testing "test failure notification"
+      (let [notify-message "failure"
+            notify-state {:open true
+                          :type :error
+                          :duration 2000
+                          :message notify-message}
+            event [:notify-failure {:msg notify-message}]
+            result (sut/notification-event db event)]
+        (t/is (= (get-in result [:state :notification]) notify-state))))
+    (t/testing "test close notification"
+      (let [notify-state {:open false
+                          :type :normal
+                          :duration 1000
+                          :message ""}
+            event [:close-notification]
+            result (sut/notification-event db event)]
+        (t/is (= (get-in result [:state :notification]) notify-state))))))
