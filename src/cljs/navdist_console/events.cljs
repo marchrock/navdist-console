@@ -203,10 +203,7 @@
  notification-event)
 
 ;; toggle settings dialog open/close state
-(re-frame/reg-event-fx
- :toggle-settings
- [(re-frame/inject-cofx :user-data-dir)]
- (fn-traced
+(defn-traced toggle-settings
   [cofx [_ v]]
   (let [db (:db cofx)]
     (timbre/spy v)
@@ -214,23 +211,34 @@
       {:db (assoc-in db [:state :settings :open] v)}
       {:db (assoc-in db [:state :settings :open] v)
        :write-edn {:config (:config db)
-                   :user-data-dir (:user-data-dir cofx)}}))))
+                   :user-data-dir (:user-data-dir cofx)}})))
 
-(re-frame/reg-event-db
- :settings-locale
- (fn-traced
+(re-frame/reg-event-fx
+ :toggle-settings
+ [(re-frame/inject-cofx :user-data-dir)]
+ toggle-settings)
+
+;; configure locale
+(defn-traced settings-locale
   [db [_ v]]
   (-> db
       (assoc-in [:config :locale] (keyword v))
-      (timbre/spy))))
+      (timbre/spy)))
 
 (re-frame/reg-event-db
- :settings-screenshot-path
- (fn-traced
+ :settings-locale
+ settings-locale)
+
+;; configure screenshot path
+(defn-traced settings-screenshot-path
   [db [_ v]]
   (-> db
       (assoc-in [:config :screenshot :path] (:path v))
-      (timbre/spy))))
+      (timbre/spy)))
+
+(re-frame/reg-event-db
+ :settings-screenshot-path
+ settings-screenshot-path)
 
 ;; settings zoom factor
 (defn-traced settings-zoom-factor

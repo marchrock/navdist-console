@@ -183,3 +183,61 @@
             event [:close-notification]
             result (sut/notification-event db event)]
         (t/is (= (get-in result [:state :notification]) notify-state))))))
+
+(t/deftest toggle-settings
+  (let [db {:config {} :state {:settings {:open true}}}
+        user-data-dir "/home/clojure/.config"
+        cofx {:db db :user-data-dir user-data-dir}]
+    (t/testing "test settings dialog open"
+      (let [state true
+            event [:toggle-settings state]
+            result (sut/toggle-settings cofx event)]
+        (t/is (= (get-in result [:db :state :settings :open]) state))))
+    (t/testing "test settings dialog close"
+      (let [state false
+            event [:toggle-settings state]
+            result (sut/toggle-settings cofx event)]
+        (t/is (contains? result :write-edn))
+        (t/is (= (get-in result [:db :state :settings :open]) state))
+        (t/is (= (get-in result [:write-edn :user-data-dir]) user-data-dir))))))
+
+(t/deftest settings-locale
+  (let [db {:config {:locale :ja}}]
+    (t/testing "test settings locale change to ja"
+      (let [locale "ja"
+            locale-key :ja
+            event [:settings-locale locale]
+            result (sut/settings-locale db event)]
+        (t/is (= (get-in result [:config :locale]) locale-key))))
+    (t/testing "test settings locale change to en"
+      (let [locale "en"
+            locale-key :en
+            event [:settings-locale locale]
+            result (sut/settings-locale db event)]
+        (t/is (= (get-in result [:config :locale]) locale-key))))))
+
+(t/deftest settings-screenshot-path
+  (let [db {:config {:screenshot {:path "/"}}}]
+    (t/testing "test screenshot path change"
+      (let [path "/home/clojure/Picture/navdist"
+            event [:settings-screenshot-path {:path path}]
+            result (sut/settings-screenshot-path db event)]
+        (t/is (= (get-in result [:config :screenshot :path]) path))))))
+
+(t/deftest settings-zoom-factor
+  (let [db {:config {:zoom-factor 1.0}}
+        mock-webview [:mock-webview]
+        mock-app [:mock-app]
+        cofx {:db db :main-webview mock-webview :current-app mock-app}]
+    (t/testing "test zoom factor change"
+      (let [zoom-factor 0.75
+            event [:settings-zoom-factor zoom-factor]
+            result (sut/settings-zoom-factor cofx event)]
+        (t/is (contains? result :apply-zoom-factor))
+        (t/is (contains? result :resize-electron-window))
+        (t/is (contains? result :db))
+        (t/is (= (get-in result [:apply-zoom-factor :target-webview]) mock-webview))
+        (t/is (= (get-in result [:apply-zoom-factor :zoom-factor]) zoom-factor))
+        (t/is (= (get-in result [:resize-electron-window :current-window]) mock-app))
+        (t/is (= (get-in result [:resize-electron-window :zoom-factor]) zoom-factor))
+        (t/is (= (get-in result [:db :config :zoom-factor]) zoom-factor))))))
