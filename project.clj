@@ -66,6 +66,16 @@
                     :external-config      {:devtools/config {:features-to-install :all}}
                     }}
 
+    {:id           "release"
+     :source-paths ["src/cljs"]
+     :compiler     {:main            navdist-console.core
+                    :output-to       "resources/public/js/compiled/app.js"
+                    :output-dir      "resources/public/js/compiled/release"
+                    :asset-path      "js/compiled/release"
+                    :optimizations   :none
+                    :closure-defines {goog.DEBUG false}
+                    :pretty-print    false}}
+
     {:id           "min"
      :source-paths ["src/cljs"]
      :compiler     {:main            navdist-console.core
