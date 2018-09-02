@@ -41,7 +41,7 @@ jobs:
       # 32bit wine is required by electron-packager to build for win on Linux
       - run: sudo dpkg --add-architecture i386
       - run: sudo apt-get update -y
-      - run: sudo apt-get install -y --no-install-recommends wine wine32
+      - run: sudo apt-get install -y --no-install-recommends wine wine32 zip
 
       - run: sudo npm install -g electron-packager
       - save_cache:
@@ -52,9 +52,12 @@ jobs:
       - run: lein clean
       - run: lein cljsbuild once release
       - run: lein garden once
+
+      # build and artifacts
       - run: electron-packager . --platform=win32 --arch=x64
+      - run: zip -r navdist-console-win32-x64.zip ~/repo/navdist-console-win32-x64
       - store_artifacts:
-          path: ~/repo/navidst-console-win32-x64
+          path: ~/repo/navidst-console-win32-x64.zip
 workflows:
   version: 2
   test-and-build:
