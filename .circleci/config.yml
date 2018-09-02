@@ -57,7 +57,7 @@ jobs:
       - run: electron-packager . --platform=win32 --arch=x64
       - run: zip -r ~/repo/navdist-console-win32-x64.zip ~/repo/navdist-console-win32-x64
       - store_artifacts:
-          path: ~/repo/navidst-console-win32-x64.zip
+          path: ~/repo/navdist-console-win32-x64.zip
 workflows:
   version: 2
   test-and-build:
