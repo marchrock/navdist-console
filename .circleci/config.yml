@@ -1,45 +1,71 @@
-# Clojure CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-clojure/ for more details
-#
 version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: circleci/clojure:lein-2.8.1-node-browsers
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
     working_directory: ~/repo
-
     environment:
       LEIN_ROOT: "true"
-      # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
-    
     steps:
       - checkout
-
-      # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "project.clj" }}
-          # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-
       - run: lein deps
-      - run : sudo npm install -g karma-cli
+      - run: sudo npm install -g karma-cli
       - run: npm install
-
       - save_cache:
           paths:
             - ~/.m2
             - ~/repo/node_modules
           key: v1-dependencies-{{ checksum "project.clj" }}
-        
-      # run tests!
       - run: lein doo electron test once
+  deploy:
+    docker:
+      - image: circleci/clojure:lein-2.8.1-node-browsers
+    working_directory: ~/repo
+    environment:
+      LEIN_ROOT: "true"
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "project.clj" }}
+          - v1-dependencies-
+      - run: lein deps
+      - run: npm install
+
+      # 32bit wine is required by electron-packager to build for win on Linux
+      - run: sudo dpkg --add-architecture i386
+      - run: sudo apt-get update -y
+      - run: sudo apt-get install -y --no-install-recommends wine wine32 zip
+
+      - run: sudo npm install -g electron-packager
+      - save_cache:
+          paths:
+            - ~/.m2
+            - ~/repo/node_modules
+          key: v1-dependencies-{{ checksum "project.clj" }}
+      - run: lein clean
+      - run: lein cljsbuild once release
+      - run: lein garden once
+
+      # build and artifacts
+      - run: electron-packager . --platform=win32 --arch=x64
+      - run: zip -r ~/repo/navdist-console-win32-x64.zip ./navdist-console-win32-x64
+      - store_artifacts:
+          path: ~/repo/navdist-console-win32-x64.zip
+workflows:
+  version: 2
+  test-and-build:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
