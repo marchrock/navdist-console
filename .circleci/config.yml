@@ -37,6 +37,7 @@ jobs:
           - v1-dependencies-
       - run: lein deps
       - run: npm install
+      - run: sudo apt-get install -y wine
       - run: sudo npm install -g electron-packager
       - save_cache:
           paths:
@@ -57,6 +58,3 @@ workflows:
       - deploy:
           requires:
             - build
-          filters:
-            branches:
-              only: master
