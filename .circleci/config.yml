@@ -37,7 +37,12 @@ jobs:
           - v1-dependencies-
       - run: lein deps
       - run: npm install
-      - run: sudo apt-get install -y wine
+
+      # 32bit wine is required by electron-packager to build for win on Linux
+      - run: sudo dpkg --add-architecture i386
+      - run: sudo apt-get update -y
+      - run: sudo apt-get install -y --no-install-recommends wine wine32
+
       - run: sudo npm install -g electron-packager
       - save_cache:
           paths:
