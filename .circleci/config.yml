@@ -44,7 +44,7 @@ jobs:
             - ~/repo/node_modules
           key: v1-dependencies-{{ checksum "project.clj" }}
       - run: lein clean
-      - run: lein cljsbuild release
+      - run: lein cljsbuild once release
       - run: lein garden once
       - run: electron-packager . --platform=win32 --arch=x64
       - store_artifacts:
