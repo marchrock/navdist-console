@@ -37,7 +37,7 @@ jobs:
           - v1-dependencies-
       - run: lein deps
       - run: npm install
-      - run: npm install -g electron-packager
+      - run: sudo npm install -g electron-packager
       - save_cache:
           paths:
             - ~/.m2
