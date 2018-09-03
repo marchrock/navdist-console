@@ -74,18 +74,19 @@
 (defn-traced inject-debugger
   [req]
   (timbre/debug "inject-debugger")
-  (let [webview (timbre/spy (:webview req))
-        web-content (.getWebContents webview)
-        debugger (.-debugger web-content)]
+  (let [debugger (-> (:webview req) .getWebContents .-debugger)]
     (try
       (.attach debugger "1.2")
       (timbre/debug "debugger attached")
-      (catch js/Error e
-        (timbre/error e)))
 
-    (.on debugger "detach" (fn [e r] (timbre/info "Debugger detached: " r)))
-    (.on debugger "message" (fn [e m p] (debugger-message-handler debugger e m p)))
-    (.sendCommand debugger "Network.enable")))
+      (.on debugger "detach" (fn [e r] (timbre/info "Debugger detached: " r)))
+      ;; "message" event handler for debugger handles real things
+      (.on debugger "message" (fn [e m p] (debugger-message-handler debugger e m p)))
+      (.sendCommand debugger "Network.enable")
+      (timbre/debug "debugger successfully initialized")
+
+      (catch js/Error e
+        (timbre/error e)))))
 
 (defn-traced inject-webview-debugger
   [req]
