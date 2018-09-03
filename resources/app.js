@@ -18,3 +18,7 @@ app.on('ready', () => {
         mainWindow = null;
     });
 });
+
+app.on('window-all-closed', () => {
+    app.quit();
+});
