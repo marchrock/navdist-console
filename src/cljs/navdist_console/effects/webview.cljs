@@ -35,3 +35,66 @@
 (re-frame/reg-fx
  :apply-zoom-factor
  apply-zoom-factor)
+
+;; inject debugger
+(def api-endpoint-match #"^http://.*/kcsapi/.+$")
+
+(defrecord ApiRecord [request-id response url headers])
+
+;; queue for api response
+(def api-queue (atom ()))
+
+(defn debugger-message-handler
+  [debugger e m p]
+  (if (= m "Network.responseReceived")
+    (when (and (= (-> p .-response .-mimeType) "text/plain")
+               (re-find #"^http://.*/kcsapi/.+$" (-> p .-response .-url)))
+      (timbre/debug "responseReceived")
+      (let [headers (-> p .-response .-headers
+                        (js->clj :keywordize-keys true))]
+        (swap! api-queue conj (ApiRecord. (-> p .-requestId)
+                                          (-> p .-response)
+                                          (-> p .-response .-url)
+                                          headers)))))
+  (if (= m "Network.loadingFinished")
+    (let [request-id (-> p .-requestId)
+          record (-> (filter #(= request-id (:request-id %)) @api-queue)
+                     first)]
+      (when record
+        (timbre/debug "loadingFinished")
+        (.sendCommand debugger "Network.getResponseBody"
+                      (clj->js {:requestId request-id})
+                      (fn [e r]
+                        (timbre/spy (:url record))
+                        (timbre/spy (:headers record))
+                        (timbre/spy (.-body r))))
+        (swap! api-queue (fn [x] (remove #(= request-id (:request-id %)) x)))
+        (timbre/spy @api-queue)))))
+
+(defn-traced inject-debugger
+  [req]
+  (timbre/debug "inject-debugger")
+  (let [webview (timbre/spy (:webview req))
+        web-content (.getWebContents webview)
+        debugger (.-debugger web-content)]
+    (try
+      (.attach debugger "1.2")
+      (timbre/debug "debugger attached")
+      (catch js/Error e
+        (timbre/error e)))
+
+    (.on debugger "detach" (fn [e r] (timbre/info "Debugger detached: " r)))
+    (.on debugger "message" (fn [e m p] (debugger-message-handler debugger e m p)))
+    (.sendCommand debugger "Network.enable")))
+
+(defn-traced inject-webview-debugger
+  [req]
+  (let [webview (:target-webview req)]
+    (.addEventListener webview "dom-ready"
+                       (fn []
+                         (inject-debugger {:webview webview}))
+                       (clj->js {:once true}))))
+
+(re-frame/reg-fx
+ :webview-injectdebugger
+ inject-webview-debugger)

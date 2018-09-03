@@ -56,9 +56,11 @@
 ;; initialize webview event to inject css to show only game screen in webview
 (defn-traced initialize-webview
   [cofx _]
-  (let [db (:db cofx)]
-    {:webview-injectcss {:target-webview (:main-webview cofx)
-                         :user-css (get-in db [:config :user-css])}}))
+  (let [db (:db cofx)
+        main-webview (:main-webview cofx)]
+    {:webview-injectcss {:target-webview main-webview
+                         :user-css (get-in db [:config :user-css])}
+     :webview-injectdebugger {:target-webview main-webview}}))
 
 (re-frame/reg-event-fx
  :initialize-webview
