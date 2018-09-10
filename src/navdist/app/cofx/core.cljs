@@ -1,7 +1,7 @@
 (ns navdist.app.cofx.core
   (:require
    [re-frame.core :as re-frame]
-   ["electron" :refer remote]))
+   ["electron" :refer [remote]]))
 
 (re-frame/reg-cofx
  :os-home-dir
