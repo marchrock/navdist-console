@@ -1,0 +1,21 @@
+{:source-paths
+ ["src"]
+
+ :dependencies
+ [[reagent "0.8.1"]
+  [re-frame "0.10.5"]
+  [secretary "1.2.3"]
+  [com.taoensso/tempura "1.2.1"]
+  [com.taoensso/timbre "4.10.0"]
+  [com.andrewmcveigh/cljs-time "0.5.2"]]
+
+ :builds
+ {:main {:target :node-script
+         :output-to "resources/main.js"
+         :main navdist.main.core/main}
+
+  :renderer {:target :browser
+             :output-dir "resources/public/js"
+             :asset-path "js"
+
+             :modules {:renderer {:entries [navdist.renderer.core]}}}}}
