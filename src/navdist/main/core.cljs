@@ -1,5 +1,6 @@
 (ns navdist.main.core
-  (:require ["electron" :refer [app BrowserWindow]]))
+  (:require
+   ["electron" :refer [app BrowserWindow]]))
 
 (def main-window (atom nil))
 

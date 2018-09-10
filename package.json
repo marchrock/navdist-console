@@ -7,10 +7,10 @@
     "test": "test"
   },
   "scripts": {
-      "watch:dev": "shadow-cljs watch main renderer",
-      "build:dev": "shadow-cljs compile main renderer",
-      "build:prod": "shadow-cljs release main renderer",
-      "clean": "rm -rf resources/public/js/* && rm -rf target"
+    "watch:dev": "shadow-cljs watch main app",
+    "build:dev": "shadow-cljs compile main app",
+    "build:prod": "shadow-cljs release main app",
+    "clean": "rm -rf resources/public/js/* && rm -rf target"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/marchrock/navdist-console",
   "dependencies": {
+    "create-react-class": "^15.6.3",
     "react": "^16.5.0",
     "react-dom": "^16.5.0"
   },

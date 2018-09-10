@@ -7,15 +7,18 @@
   [secretary "1.2.3"]
   [com.taoensso/tempura "1.2.1"]
   [com.taoensso/timbre "4.10.0"]
-  [com.andrewmcveigh/cljs-time "0.5.2"]]
+  [com.andrewmcveigh/cljs-time "0.5.2"]
+
+  [day8.re-frame/tracing "0.5.1"]]
 
  :builds
  {:main {:target :node-script
          :output-to "resources/main.js"
          :main navdist.main.core/main}
 
-  :renderer {:target :browser
-             :output-dir "resources/public/js"
-             :asset-path "js"
-
-             :modules {:renderer {:entries [navdist.renderer.core]}}}}}
+  :app {:target :browser
+        :output-dir "resources/public/js"
+        :asset-path "js"
+        :modules {:app {:entries [navdist.app.core]}}
+        :devtools {:after-load navdist.app.core/reload-hook}
+        :js-options {:js-provider :require}}}}
