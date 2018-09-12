@@ -3,6 +3,7 @@
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
    [taoensso.timbre :as timbre]
+   [navdist.app.views :as views]
    [navdist.app.events.core]
    [navdist.app.cofx.core]))
 
@@ -18,7 +19,9 @@
 (defn mount-root
   []
   (timbre/debug "mount-root")
-  (re-frame/clear-subscription-cache!))
+  (re-frame/clear-subscription-cache!)
+  (reagent/render [views/app-view]
+                  (.getElementById js/document "app")))
 
 (defn reload-hook
   []
