@@ -2,5 +2,7 @@
 
 (def default-db
   {:config {}
-   :state {}
+   :state
+   {:app-bar {:dz-enabled false}
+    :volume true}
    :api {}})

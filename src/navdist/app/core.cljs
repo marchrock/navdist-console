@@ -5,7 +5,8 @@
    [taoensso.timbre :as timbre]
    [navdist.app.views :as views]
    [navdist.app.events.core]
-   [navdist.app.cofx.core]))
+   [navdist.app.cofx.core]
+   [navdist.app.subs.core]))
 
 (defn pre-init-dispatcher
   []
