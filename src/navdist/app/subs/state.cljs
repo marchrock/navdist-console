@@ -11,3 +11,8 @@
  :state-app-bar-menu
  (fn [db]
    (get-in db [:state :app-bar :menu])))
+
+(re-frame/reg-sub
+ :state-dialog-shutdown
+ (fn [db]
+   (get-in db [:state :dialog :shutdown])))

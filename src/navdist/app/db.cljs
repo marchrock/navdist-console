@@ -4,5 +4,6 @@
   {:config {}
    :state
    {:app-bar {:menu {:open false :target nil}}
-    :volume true}
+    :volume true
+    :dialog {:shutdown false}}
    :api {}})

@@ -14,3 +14,13 @@
 (re-frame/reg-event-db
  :toggle-webview-control-menu
  toggle-webview-control-menu)
+
+(defn-traced toggle-dialog-confirm-shutdown
+  [db [_ v]]
+  (let [open? (:open v)]
+    (-> (assoc-in db [:state :dialog :shutdown] open?)
+        (timbre/spy))))
+
+(re-frame/reg-event-db
+ :toggle-dialog-confirm-shutdown
+ toggle-dialog-confirm-shutdown)
