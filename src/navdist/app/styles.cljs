@@ -5,5 +5,14 @@
 
 (def app-theme
   (mui-styles/createMuiTheme
-   (clj->js {:palette {:primary mui-colors/lightBlue
+   (clj->js {:palette {:primary mui-colors/indigo
                        :secondary mui-colors/red}})))
+
+(def drag-region
+  {:-webkit-app-region "drag"})
+
+(def no-drag-region
+  {:-webkit-app-region "no-drag"})
+
+(def grow
+  {:flexGrow 1})

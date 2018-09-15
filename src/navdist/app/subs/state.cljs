@@ -8,6 +8,6 @@
    (get-in db [:state :volume])))
 
 (re-frame/reg-sub
- :state-app-bar
+ :state-app-bar-menu
  (fn [db]
-   (get-in db [:state :app-bar])))
+   (get-in db [:state :app-bar :menu])))

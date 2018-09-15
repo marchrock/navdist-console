@@ -9,6 +9,13 @@
 (def icon-button-param
   {:color "inherit"})
 
+(defn overflow-menu
+  [& params]
+  (let [custom-param (first params)
+        p (merge icon-button-param custom-param)]
+    [:> mui/IconButton p
+     [:> mui-icons/MoreVert]]))
+
 (defn screenshot
   "Screenshot icon button"
   [& params]
