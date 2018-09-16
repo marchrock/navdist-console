@@ -4,6 +4,7 @@
    [navdist.app.helper :refer [<sub >evt >evtm]]
    [navdist.app.views.atoms.icon-button :as ib]
    [navdist.app.views.atoms.menu :as menu]
+   [navdist.app.i18n :refer [tr]]
    [taoensso.timbre :as timbre]
    ["@material-ui/core" :as mui]
    ["@material-ui/icons" :as mui-icons]))
@@ -14,15 +15,15 @@
     [:> mui/Menu {:open (:open state)
                   :anchorEl (:anchor state)
                   :on-close #(>evt [:toggle-webview-control-menu {:open false}])}
-     [menu/icon-menu-item "Zoom" [:> mui-icons/ZoomIn]
+     [menu/icon-menu-item [:app-bar-menu/zoom] [:> mui-icons/ZoomIn]
       {:disabled true}]
-     [menu/icon-menu-item "Settings" [:> mui-icons/Settings]
-      {:disabled true}]
-     [:> mui/Divider]
-     [menu/icon-menu-item "Reload" [:> mui-icons/Refresh]
+     [menu/icon-menu-item [:app-bar-menu/settings] [:> mui-icons/Settings]
       {:disabled true}]
      [:> mui/Divider]
-     [menu/icon-menu-item "Shutdown" [:> mui-icons/PowerSettingsNew]
+     [menu/icon-menu-item [:app-bar-menu/reload] [:> mui-icons/Refresh]
+      {:disabled true}]
+     [:> mui/Divider]
+     [menu/icon-menu-item [:app-bar-menu/shutdown] [:> mui-icons/PowerSettingsNew]
       {:on-click #(>evtm [:toggle-dialog-confirm-shutdown {:open true}]
                          [:toggle-webview-control-menu {:open false}])}]]))
 
