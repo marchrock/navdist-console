@@ -6,3 +6,8 @@
  :config-locale
  (fn [db]
    (get-in db [:config :locale])))
+
+(re-frame/reg-sub
+ :config-uri
+ (fn [db]
+   (get-in db [:config :uri])))

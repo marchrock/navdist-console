@@ -2,6 +2,7 @@
   (:require
    ["@material-ui/core/styles" :as mui-styles]
    [navdist.app.styles :as s]
+   [navdist.app.views.organisms.webview :refer [app-webview]]
    [navdist.app.views.organisms.header :refer [header-app-bar]]
    [navdist.app.views.organisms.floating :refer [dialogs]]))
 
@@ -9,6 +10,11 @@
   []
   [:div
    [header-app-bar]])
+
+(defn content
+  []
+  [:div
+   [app-webview]])
 
 (defn footer
   []
@@ -23,5 +29,6 @@
   []
   [:> mui-styles/MuiThemeProvider {:theme s/app-theme}
    [header]
+   [content]
    [footer]
    [staging-area]])
