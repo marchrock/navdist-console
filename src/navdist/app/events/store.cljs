@@ -9,9 +9,11 @@
   [cofx _]
   (timbre/debug "initialize-db")
   (let [db (:db cofx)
-        homedir (:os-home-dir cofx)]
-    (timbre/spy homedir)
-    {:db db/default-db}))
+        home-dir (:os-home-dir cofx)]
+    (timbre/spy home-dir)
+    (if (nil? home-dir)
+      {:db db/default-db}
+      {:db (assoc-in db/default-db [:config :screenshot :path] (str home-dir "/Downloads"))})))
 
 (re-frame/reg-event-fx
  :initialize-db

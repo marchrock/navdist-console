@@ -8,7 +8,11 @@
 (def default-db
   {:config
    {:locale :en
-    :uri "https://www.youtube.com/"}
+    :uri "https://www.youtube.com/"
+    :screenshot {:path "~/Downloads/"
+                 :prefix "navdist-"
+                 :suffix ".png"
+                 :time-format "yyyyMMdd-HHmmssZZ"}}
    :state
    {:app-bar {:menu {:open false :target nil}}
     :volume true

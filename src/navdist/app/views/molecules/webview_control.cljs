@@ -30,7 +30,7 @@
 (defn webview-control
   []
   [:div {:style s/no-drag-region}
-   [ib/screenshot]
+   [ib/screenshot {:on-click #(>evt [:webview-screenshot])}]
    [ib/toggle-volume [:state-volume]]
    [ib/overflow-menu {:on-click
                       #(>evt [:toggle-webview-control-menu {:open true :anchor (-> % .-target)}])}]
