@@ -16,7 +16,9 @@
    :state
    {:app-bar {:menu {:open false :target nil}}
     :volume true
-    :dialog {:shutdown false}}
+    :dialog {:shutdown false}
+    :notification {:open true
+                   :message "Help!"}}
    :api {}})
 
 (def user-css

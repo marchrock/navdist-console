@@ -16,3 +16,8 @@
  :state-dialog-shutdown
  (fn [db]
    (get-in db [:state :dialog :shutdown])))
+
+(re-frame/reg-sub
+ :state-notification
+ (fn [db]
+   (get-in db [:state :notification])))

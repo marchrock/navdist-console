@@ -4,7 +4,7 @@
    [navdist.app.styles :as s]
    [navdist.app.views.organisms.webview :refer [app-webview]]
    [navdist.app.views.organisms.header :refer [header-app-bar]]
-   [navdist.app.views.organisms.floating :refer [dialogs]]))
+   [navdist.app.views.organisms.floating :as f]))
 
 (defn header
   []
@@ -23,7 +23,8 @@
 (defn staging-area
   []
   [:span
-   [dialogs]])
+   [f/dialogs]
+   [f/notification]])
 
 (defn app-view
   []
