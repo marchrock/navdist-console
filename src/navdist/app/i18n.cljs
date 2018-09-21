@@ -15,6 +15,8 @@
                        :settings "Settings"
                        :reload "Reload"
                        :zoom "Zoom"}
+        :screenshot {:success "Screenshot saved!"
+                     :failure "Screenshot failed"}
         :dialog {:shutdown (str "Shutdown " db/app-name "?")}
         :button {:apply "Apply"
                  :cancel "Cancel"

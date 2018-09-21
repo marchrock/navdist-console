@@ -15,6 +15,7 @@
   []
   (let [state (<sub [:state-notification])
         message-key (get-in state [:message])]
+    (timbre/spy state)
     (timbre/spy message-key)
     [:> mui/Snackbar {:anchorOrigin notification-anchor
                       :open (:open state)

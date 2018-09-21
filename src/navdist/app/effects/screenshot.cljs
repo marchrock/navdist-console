@@ -4,6 +4,7 @@
    [day8.re-frame.tracing :refer-macros [defn-traced]]
    [cljs-time.format :as time-format]
    [taoensso.timbre :as timbre]
+   [navdist.app.helper :refer [>evt]]
    ["fs" :as fs]))
 
 (defn save-screenshot-to-file
@@ -12,7 +13,11 @@
     (.writeFile fs file-path png-img
                 (fn [err]
                   (if err
-                    (timbre/error err))))))
+                    (do (timbre/error err)
+                        (>evt [:toggle-notification {:open true
+                                                     :message [:screenshot/failure]}]))
+                    (>evt [:toggle-notification {:open true
+                                                 :message [:screenshot/success]}]))))))
 
 (defn save-screenshot
   [req]
