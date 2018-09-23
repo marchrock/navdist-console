@@ -27,6 +27,17 @@
  :toggle-dialog-confirm-shutdown
  toggle-dialog-confirm-shutdown)
 
+;; toggle open state of dialog to choose zoom factor
+(defn-traced toggle-dialog-zoom-factor
+  [db [_ v]]
+  (let [open? (:open v)]
+    (-> (assoc-in db [:state :dialog :zoom-factor] open?)
+        (timbre/spy))))
+
+(re-frame/reg-event-db
+ :toggle-dialog-zoom-factor
+ toggle-dialog-zoom-factor)
+
 ;;
 (defn-traced toggle-notification
   [db [_ v]]

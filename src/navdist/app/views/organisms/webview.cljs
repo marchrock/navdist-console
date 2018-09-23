@@ -4,13 +4,15 @@
    ["@material-ui/core" :as mui]))
 
 (def app-webview-style
-  {100 (clj->js {:width "1200px" :height "720px"})
-   75 (clj->js {:width "900px" :height "540px"})
-   66 (clj->js {:width "800px" :height "480px"})})
+  {100 {:width "1200px" :height "720px"}
+   75 {:width "900px" :height "540px"}
+   66 {:width "800px" :height "480px"}})
 
 (defn app-webview
   []
   [:> mui/Paper
    [:webview {:id "app-webview"
-              :style (get-in app-webview-style [100])
+              :style (-> (merge (get-in app-webview-style [(<sub [:config-zoom-factor])])
+                                {:maxWidth "1200px" :maxHeight "720px"})
+                         (clj->js))
               :src (<sub [:config-uri])}]])

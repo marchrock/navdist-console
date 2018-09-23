@@ -6,7 +6,8 @@
 (defn dialogs
   []
   [:span
-   [d/confirm-shutdown]])
+   [d/confirm-shutdown]
+   [d/config-zoom-factor]])
 
 (defn notification
   []

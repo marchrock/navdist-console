@@ -16,7 +16,8 @@
                   :anchorEl (:anchor state)
                   :on-close #(>evt [:toggle-webview-control-menu {:open false}])}
      [menu/icon-menu-item [:app-bar-menu/zoom] [:> mui-icons/ZoomIn]
-      {:disabled true}]
+      {:on-click #(>evtm [:toggle-dialog-zoom-factor {:open true}]
+                         [:toggle-webview-control-menu {:open false}])}]
      [menu/icon-menu-item [:app-bar-menu/settings] [:> mui-icons/Settings]
       {:disabled true}]
      [:> mui/Divider]

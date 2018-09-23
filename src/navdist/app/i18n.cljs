@@ -17,7 +17,8 @@
                        :zoom "Zoom"}
         :screenshot {:success "Screenshot saved!"
                      :failure "Screenshot failed"}
-        :dialog {:shutdown (str "Shutdown " db/app-name "?")}
+        :dialog {:shutdown (str "Shutdown " db/app-name "?")
+                 :zoom-factor "Select zoom factor"}
         :button {:apply "Apply"
                  :cancel "Cancel"
                  :shutdown "Shutdown"

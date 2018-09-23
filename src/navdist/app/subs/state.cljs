@@ -21,3 +21,8 @@
  :state-notification
  (fn [db]
    (get-in db [:state :notification])))
+
+(re-frame/reg-sub
+ :state-dialog-zoom-factor
+ (fn [db]
+   (get-in db [:state :dialog :zoom-factor])))

@@ -2,5 +2,7 @@
   (:require
    [navdist.app.effects.screenshot]
    [navdist.app.effects.shutdown]
-   [navdist.app.effects.volume]))
+   [navdist.app.effects.volume]
+   [navdist.app.effects.window]
+   [navdist.app.effects.webview]))
 

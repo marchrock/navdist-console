@@ -11,3 +11,8 @@
  :config-uri
  (fn [db]
    (get-in db [:config :uri])))
+
+(re-frame/reg-sub
+ :config-zoom-factor
+ (fn [db]
+   (get-in db [:config :zoom-factor])))
