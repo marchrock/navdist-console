@@ -31,7 +31,7 @@
   []
   [:div {:style s/no-drag-region}
    [ib/screenshot {:on-click #(>evt [:webview-screenshot])}]
-   [ib/toggle-volume [:state-volume]]
+   [ib/toggle-volume [:state-volume] {:on-click #(>evt [:webview-volume])}]
    [ib/overflow-menu {:on-click
                       #(>evt [:toggle-webview-control-menu {:open true :anchor (-> % .-target)}])}]
    [webview-control-overflow-menu]])
