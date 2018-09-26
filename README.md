@@ -2,7 +2,8 @@
 Navdist Console - Better console to rule the wave.
 
 [![CircleCI](https://circleci.com/gh/marchrock/navdist-console.svg?style=svg)](https://circleci.com/gh/marchrock/navdist-console)
-## Development Mode
+
+## Development
 
 ### Start Cider from Emacs:
 
@@ -20,13 +21,13 @@ Navigate to a clojurescript file and start a figwheel REPL with `cider-jack-in-c
 ### Run application:
 
 ```
-lein figwheel dev
-npm start
+npm run watch:dev
+npx electron .
 ```
 
-`npm start` will start electron automatically and will connect to figwheel.
+`npx electron .` will start electron and will connect to shadow-cljs.
 
-Note: 2 terminal instance is required.
+Note: 2 terminal tab is required.
 
 
 ### Run tests:
@@ -52,6 +53,6 @@ Please note that [doo](https://github.com/bensu/doo) can be configured to run cl
 To compile clojurescript to javascript:
 
 ```
-lein clean
-lein cljsbuild once min
+npm clean
+npm run build:prod
 ```
