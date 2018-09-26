@@ -4,6 +4,7 @@
    [day8.re-frame.tracing :refer-macros [defn-traced]]
    [taoensso.timbre :as timbre]))
 
+;; take screenshot
 (defn-traced webview-screenshot
   [cofx [_ v]]
   (let [ss-config (-> (:db cofx) (get-in [:config :screenshot]))]
@@ -18,6 +19,7 @@
   (re-frame/inject-cofx :now)]
  webview-screenshot)
 
+;; toggle volume
 (defn-traced webview-volume
   [cofx [_ v]]
   (let [db (:db cofx)
@@ -32,3 +34,14 @@
  :webview-volume
  [(re-frame/inject-cofx :app-webview)]
  webview-volume)
+
+;; reload
+(defn-traced webview-reload
+  [cofx [_ v]]
+  (let [webview (:app-webview cofx)]
+    {:reload-webview {:target-webview webview}}))
+
+(re-frame/reg-event-fx
+ :webview-reload
+ [(re-frame/inject-cofx :app-webview)]
+ webview-reload)

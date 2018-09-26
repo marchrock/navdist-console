@@ -4,6 +4,7 @@
    [day8.re-frame.tracing :refer-macros [defn-traced]]
    [taoensso.timbre :as timbre]))
 
+;; resize
 (defn-traced resize-webview
   "Apply zoom factor to target webview.
 
@@ -20,3 +21,14 @@
 (re-frame/reg-fx
  :resize-webview
  resize-webview)
+
+;; reload
+(defn-traced reload-webview
+  "Reload webview contents."
+  [req]
+  (let [webview (:target-webview req)]
+    (.reloadIgnoringCache webview)))
+
+(re-frame/reg-fx
+ :reload-webview
+ reload-webview)
