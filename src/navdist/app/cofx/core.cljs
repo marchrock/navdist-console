@@ -11,6 +11,12 @@
    (let [app (-> remote .-app)]
      (assoc cofx :os-home-dir (.getPath app "home")))))
 
+(re-fram/reg-cofx
+ :user-data-dir
+ (fn [cofx]
+   (let [app (-> remote .-app)]
+     (assoc cofx :user-data-dir (.getPath app "userData")))))
+
 (re-frame/reg-cofx
  :current-window
  (fn [cofx]
