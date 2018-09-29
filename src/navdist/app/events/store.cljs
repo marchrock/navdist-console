@@ -19,3 +19,18 @@
  :initialize-db
  [(re-frame/inject-cofx :os-home-dir)]
  initialize-db)
+
+;; read or write config to edn
+(defn-traced config-persist
+  [cofx [_ v]]
+  (let [type (:type v)
+        db (:db cofx)
+        user-data-dir (:user-data-dir cofx)]
+    (cond (= type :read) {:edn-read {:user-data-dir user-data-dir}}
+          (= type :write) {:edn-write {:config (:config db)
+                                       :user-data-dir user-data-dir}})))
+
+(re-frame/reg-event-fx
+ :config-persist
+ [(re-frame/inject-cofx :user-data-dir)]
+ config-persist)
