@@ -12,7 +12,8 @@
 (defn pre-init-dispatcher
   []
   (timbre/debug "pre-init-dispatcher")
-  (re-frame/dispatch-sync [:initialize-db]))
+  (re-frame/dispatch-sync [:initialize-db])
+  (re-frame/dispatch-sync [:config-persist {:type :read}]))
 
 (defn post-init-dispatcher
   []

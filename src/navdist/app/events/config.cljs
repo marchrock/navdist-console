@@ -21,4 +21,3 @@
  [(re-frame/inject-cofx :current-window)
   (re-frame/inject-cofx :app-webview)]
  config-zoom-factor)
-
