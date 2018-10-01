@@ -22,15 +22,17 @@
   [req]
   (let [file-path (:file-path req)]
     (.readFile fs file-path
-               (if err
-                 (timbre/error err)))))
+               (fn [err data]
+                 (if err
+                   (timbre/error err)
+                   (>evt [:post-initialize-db {:file-db data}]))))))
 
 (defn file-path-filter
   "Construct file path of config file"
   [req]
   (-> req
       :user-data-dir
-      (str "/" settings-file-name)
+      (str "/" config-file-name)
       (as-> x (assoc-in req [:file-path] x))))
 
 (defn parse-config-filter

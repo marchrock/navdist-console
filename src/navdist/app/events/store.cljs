@@ -1,5 +1,6 @@
 (ns navdist.app.events.store
   (:require
+   [cljs.reader :as reader]
    [re-frame.core :as re-frame]
    [day8.re-frame.tracing :refer-macros [defn-traced]]
    [taoensso.timbre :as timbre]
@@ -19,6 +20,24 @@
  :initialize-db
  [(re-frame/inject-cofx :os-home-dir)]
  initialize-db)
+
+(defn-traced post-initialize-db
+  [cofx [_ v]]
+  (timbre/debug "update-db")
+  (let [db (:db cofx)
+        updated-db (-> (:file-db v)
+                       str
+                       reader/read-string
+                       (as-> x (update-in db [:config] conj x))
+                       timbre/spy)]
+    {:db updated-db
+     :resize-electron-window {:current-window (:current-window cofx)
+                              :zoom-factor (get-in updated-db [:config :zoom-factor])}}))
+
+(re-frame/reg-event-fx
+ :post-initialize-db
+ [(re-frame/inject-cofx :current-window)]
+ post-initialize-db)
 
 ;; read or write config to edn
 (defn-traced config-persist
