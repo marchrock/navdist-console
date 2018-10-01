@@ -35,4 +35,5 @@
        {:on-click #(>evt [:toggle-dialog-zoom-factor {:open false}])}]
       [button/string-button [:button/apply]
        {:on-click #(>evtm [:config-zoom-factor {:zoom-factor @tmp-zoom-factor}]
-                          [:toggle-dialog-zoom-factor {:open false}])}]]]))
+                          [:toggle-dialog-zoom-factor {:open false}]
+                          [:config-persist {:type :write}])}]]]))
