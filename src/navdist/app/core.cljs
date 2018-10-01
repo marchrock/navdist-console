@@ -17,8 +17,7 @@
 
 (defn post-init-dispatcher
   []
-  (timbre/debug "post-init-dispatcher")
-  (re-frame/dispatch-sync [:config-persist {:type :read}]))
+  (timbre/debug "post-init-dispatcher"))
 
 (defn mount-root
   []
