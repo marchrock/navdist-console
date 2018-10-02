@@ -49,3 +49,14 @@
 (re-frame/reg-event-db
  :toggle-notification
  toggle-notification)
+
+;; toggle open state of config dialog
+(defn-traced toggle-config-panel
+  [db [_ v]]
+  (let [open? (:open v)]
+    (-> (assoc-in db [:state :config-panel :open] open?)
+        (timbre/spy))))
+
+(re-frame/reg-event-db
+ :toggle-config-panel
+ toggle-config-panel)

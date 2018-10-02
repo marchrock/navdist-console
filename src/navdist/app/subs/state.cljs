@@ -26,3 +26,8 @@
  :state-dialog-zoom-factor
  (fn [db]
    (get-in db [:state :dialog :zoom-factor])))
+
+(re-frame/reg-sub
+ :state-config-panel
+ (fn [db]
+   (get-in db [:state :config-panel])))

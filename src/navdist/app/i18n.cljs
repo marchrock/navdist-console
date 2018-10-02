@@ -22,7 +22,9 @@
         :button {:apply "Apply"
                  :cancel "Cancel"
                  :shutdown "Shutdown"
-                 :change "Change"}}})
+                 :change "Change"
+                 :save "Save"}
+        :config {:title "Settings"}}})
 
 (def navdist-i18n-dict
   (merge navdist-i18n-en-dict))

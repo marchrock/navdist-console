@@ -19,7 +19,8 @@
     :volume true
     :dialog {:shutdown false
              :zoom-factor false}
-    :notification {:open false :message nil}}
+    :notification {:open false :message nil}
+    :config-panel {:open false}}
    :api {}})
 
 (def user-css
