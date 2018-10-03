@@ -4,6 +4,8 @@
    [taoensso.timbre :as timbre]
    ["@material-ui/core" :as mui]))
 
+(defrecord MenuKvl [key value label])
+
 (defn menu-item
   [item]
   [:> mui/MenuItem {:key (:key item) :value (:value item)}
@@ -14,7 +16,7 @@
 
 (defn normal
   "Selector for all place."
-  [val items & params]
+  [val items kvl & params]
   (let [custom-param (first params)
         p (merge selector-text-field-param
                  custom-param
@@ -22,6 +24,9 @@
                   :on-change #(let [v (-> % .-target .-value (timbre/spy))]
                                 (reset! val v))})]
     (timbre/spy p)
+    (timbre/spy kvl)
     (timbre/spy items)
     [:> mui/TextField p
-     (map #(menu-item {:key (:factor %) :value (:factor %) :label (:label %)}) items)]))
+     (map #(menu-item {:key ((:key kvl) %)
+                       :value ((:value kvl) %)
+                       :label ((:label kvl) %)}) items)]))

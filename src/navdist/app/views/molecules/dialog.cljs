@@ -29,6 +29,7 @@
       (tr [:dialog/zoom-factor])]
      [:> mui/DialogContent
       [selector/normal tmp-zoom-factor db/zoom-factor
+       (selector/MenuKvl. :factor :factor :label)
        {:style (clj->js {:width "100%"})}]]
      [:> mui/DialogActions
       [button/string-button [:button/cancel]
