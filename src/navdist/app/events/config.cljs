@@ -21,3 +21,13 @@
  [(re-frame/inject-cofx :current-window)
   (re-frame/inject-cofx :app-webview)]
  config-zoom-factor)
+
+;; config locale
+(defn-traced config-locale
+  [db [_ v]]
+  (let [locale (:value v)]
+    (assoc-in db [:config :locale] locale)))
+
+(re-frame/reg-event-db
+ :config-locale
+ config-locale)

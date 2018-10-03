@@ -30,3 +30,15 @@
      (map #(menu-item {:key ((:key kvl) %)
                        :value ((:value kvl) %)
                        :label ((:label kvl) %)}) items)]))
+
+(defn direct
+  "Selector for all place."
+  [val items kvl & params]
+  (let [custom-param (first params)
+        p (merge selector-text-field-param
+                 custom-param
+                 {:value val})]
+    [:> mui/TextField p
+     (map #(menu-item {:key ((:key kvl) %)
+                       :value ((:value kvl) %)
+                       :label ((:label kvl) %)}) items)]))

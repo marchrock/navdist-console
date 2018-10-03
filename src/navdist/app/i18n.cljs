@@ -7,7 +7,8 @@
    [taoensso.timbre :as timbre]))
 
 (def navdist-locale-list
-  [:en])
+  [{:key :en :label "English"}
+   {:key :ja :label "日本語"}])
 
 (def navdist-i18n-en-dict
   {:en {:locale-name "English"
@@ -24,7 +25,11 @@
                  :shutdown "Shutdown"
                  :change "Change"
                  :save "Save"}
-        :config {:title "Settings"}}})
+        :config {:title "Settings"
+                 :locale "Locale"}}
+   :ja {:locale-name "日本語"
+        :config {:title "設定"
+                 :locale "言語設定"}}})
 
 (def navdist-i18n-dict
   (merge navdist-i18n-en-dict))
