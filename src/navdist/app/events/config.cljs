@@ -31,3 +31,13 @@
 (re-frame/reg-event-db
  :config-locale
  config-locale)
+
+;; config screenshot path
+(defn-traced config-screenshot-directory
+  [cofx [_ v]]
+  (let [db (:db cofx)]
+    {:screenshot-directory {:db db}}))
+
+(re-frame/reg-event-fx
+ :config-screenshot-directory
+ config-screenshot-directory)
