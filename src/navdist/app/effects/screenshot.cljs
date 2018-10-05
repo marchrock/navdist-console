@@ -55,20 +55,3 @@
 (re-frame/reg-fx
  :webview-save-screenshot
  webview-save-screenshot)
-
-;; screenshot directory selector
-(defn screenshot-directory-dialog
-  [dialog]
-  (.showOpenDialog dialog nil (clj->js {:properties ["openDirectory"]})))
-
-(defn-traced screenshot-directory
-  [req]
-  (let [dialog (-> electron .-remote .-dialog)
-        path (screenshot-directory-dialog dialog)
-        db (:db req)]
-    (when (some? path)
-      {:db (assoc-in db [:config :screenshot :path] (first path))})))
-
-(re-frame/reg-fx
- :screenshot-directory
- screenshot-directory)

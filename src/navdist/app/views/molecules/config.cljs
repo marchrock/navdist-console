@@ -37,13 +37,25 @@
      [:> mui/ListItemSecondaryAction
       [selector/direct current-locale i18n/navdist-locale-list
        (selector/MenuKvl. :key :key :label)
-       {:style (clj->js {:width "100%"})
+       {:style (clj->js (merge s/config-action-size))
         :on-change #(>evt [:config-locale {:value (-> % .-target .-value (timbre/spy))}])}]]]))
+
+(defn config-screenshot-dir
+  []
+  (let [current-screenshot (<sub [:config-screenshot])]
+    [:> mui/ListItem
+     [:> mui/ListItemIcon
+      [:> mui-icons/CameraAlt]]
+     [:> mui/ListItemText {:primary (tr [:config/screenshot])}]
+     [:> mui/ListItemSecondaryAction
+      [b/string-button (:path current-screenshot)
+       {:on-click #(>evt [:config-screenshot-directory])}]]]))
 
 (defn config-list
   []
   [:> mui/List
-   [config-locale]])
+   [config-locale]
+   [config-screenshot-dir]])
 
 (defn config-panel
   []

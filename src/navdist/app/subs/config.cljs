@@ -16,3 +16,8 @@
  :config-zoom-factor
  (fn [db]
    (get-in db [:config :zoom-factor])))
+
+(re-frame/reg-sub
+ :config-screenshot
+ (fn [db]
+   (get-in db [:config :screenshot])))

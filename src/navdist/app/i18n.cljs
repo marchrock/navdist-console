@@ -26,7 +26,8 @@
                  :change "Change"
                  :save "Save"}
         :config {:title "Settings"
-                 :locale "Locale"}}
+                 :locale "Locale"
+                 :screenshot "Screenshot Directory"}}
    :ja {:locale-name "日本語"
         :config {:title "設定"
                  :locale "言語設定"}}})

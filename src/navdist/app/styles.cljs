@@ -16,3 +16,6 @@
 
 (def grow
   {:flexGrow 1})
+
+(def config-action-size
+  {:width "300px"})

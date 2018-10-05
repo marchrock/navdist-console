@@ -35,9 +35,12 @@
 ;; config screenshot path
 (defn-traced config-screenshot-directory
   [cofx [_ v]]
-  (let [db (:db cofx)]
-    {:screenshot-directory {:db db}}))
+  (let [path (:screenshot-directory cofx)
+        db (-> (:db cofx)
+               (assoc-in [:config :screenshot :path] path))]
+    {:db db}))
 
 (re-frame/reg-event-fx
  :config-screenshot-directory
+ [(re-frame/inject-cofx :screenshot-directory)]
  config-screenshot-directory)

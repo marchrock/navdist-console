@@ -1,5 +1,6 @@
 (ns navdist.app.cofx.core
   (:require
+   [navdist.app.cofx.screenshot]
    [re-frame.core :as re-frame]
    [cljs-time.local :as time-local]
    [taoensso.timbre :as timbre]
