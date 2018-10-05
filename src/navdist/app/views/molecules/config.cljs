@@ -10,20 +10,7 @@
    ["@material-ui/core" :as mui]
    ["@material-ui/icons" :as mui-icons]))
 
-(defn config-title
-  []
-  [:> mui/Typography {:variant "title"
-                      :color "inherit"
-                      :style s/grow}
-   (tr [:config/title])])
-
-(defn config-control
-  []
-  [:div {:style s/no-drag-region}
-   [b/string-button [:button/close]
-    {:color "inherit"
-     :on-click #(>evtm [:toggle-config-panel {:open false}]
-                       [:config-persist {:type :write}])}]])
+;; --- configs ---
 
 (defn config-locale
   []
@@ -54,6 +41,23 @@
   [:> mui/List
    [config-locale]
    [config-screenshot-dir]])
+
+;; -- other config panel components --
+
+(defn config-title
+  []
+  [:> mui/Typography {:variant "title"
+                      :color "inherit"
+                      :style s/grow}
+   (tr [:config/title])])
+
+(defn config-control
+  []
+  [:div {:style s/no-drag-region}
+   [b/string-button [:button/close]
+    {:color "inherit"
+     :on-click #(>evtm [:toggle-config-panel {:open false}]
+                       [:config-persist {:type :write}])}]])
 
 (defn config-panel
   []
