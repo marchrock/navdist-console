@@ -20,12 +20,10 @@
 (defn config-control
   []
   [:div {:style s/no-drag-region}
-   [b/string-button [:button/cancel]
+   [b/string-button [:button/close]
     {:color "inherit"
-     :on-click #(>evt [:toggle-config-panel {:open false}])}]
-   [b/string-button [:button/save]
-    {:color "inherit"
-     :on-click #(>evt [:toggle-config-panel {:open false}])}]])
+     :on-click #(>evtm [:toggle-config-panel {:open false}]
+                       [:config-persist {:type :write}])}]])
 
 (defn config-locale
   []

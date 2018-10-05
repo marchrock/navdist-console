@@ -24,7 +24,8 @@
                  :cancel "Cancel"
                  :shutdown "Shutdown"
                  :change "Change"
-                 :save "Save"}
+                 :save "Save"
+                 :close "Close"}
         :config {:title "Settings"
                  :locale "Locale"
                  :screenshot "Screenshot Directory"}}
