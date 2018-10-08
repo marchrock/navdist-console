@@ -28,13 +28,19 @@
                  :close "Close"}
         :config {:title "Settings"
                  :locale "Locale"
-                 :screenshot "Screenshot Directory"}}
-   :ja {:locale-name "日本語"
-        :config {:title "設定"
-                 :locale "言語設定"}}})
+                 :screenshot "Screenshot Directory"}}})
+
+(def navdist-i18n-ja-dict
+  {:ja {:locale-name "日本語"
+        :app-bar-menu {:shutdown "終了"
+                       :settings "設定"
+                       :reload "リロード"
+                       :zoom "ズーム"}
+        :screenshot {:success "スクリ－ンショットは保存されました"}}})
 
 (def navdist-i18n-dict
-  (merge navdist-i18n-en-dict))
+  (merge navdist-i18n-en-dict
+         navdist-i18n-ja-dict))
 
 ;; option for tempura
 (def tr-opts
