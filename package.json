@@ -11,7 +11,8 @@
       "build:dev": "shadow-cljs compile main app",
       "build:prod": "shadow-cljs release main app",
       "clean": "rm -rf resources/public/js/* && rm -rf target",
-      "test": "shadow-cljs compile test"
+      "test": "shadow-cljs compile test",
+      "watch:test": "shadow-cljs watch test"
   },
   "repository": {
     "type": "git",
