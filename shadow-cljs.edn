@@ -1,5 +1,5 @@
 {:source-paths
- ["src"]
+ ["src" "test"]
 
  :dependencies
  [[reagent "0.8.1"]
@@ -21,4 +21,8 @@
         :asset-path "js"
         :modules {:app {:entries [navdist.app.core]}}
         :devtools {:after-load navdist.app.core/reload-hook}
-        :js-options {:js-provider :require}}}}
+        :js-options {:js-provider :require}}
+
+  :test {:target :node-test
+         :output-to "target/node-test.js"
+         :autorun true}}}

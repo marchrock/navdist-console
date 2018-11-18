@@ -7,10 +7,11 @@
     "test": "test"
   },
   "scripts": {
-    "watch:dev": "shadow-cljs watch main app",
-    "build:dev": "shadow-cljs compile main app",
-    "build:prod": "shadow-cljs release main app",
-    "clean": "rm -rf resources/public/js/* && rm -rf target"
+      "watch:dev": "shadow-cljs watch main app",
+      "build:dev": "shadow-cljs compile main app",
+      "build:prod": "shadow-cljs release main app",
+      "clean": "rm -rf resources/public/js/* && rm -rf target",
+      "test": "shadow-cljs compile test"
   },
   "repository": {
     "type": "git",
